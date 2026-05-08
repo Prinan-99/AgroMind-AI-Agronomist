@@ -1,6 +1,106 @@
 flask
 Authlib
+gunicorn
 langchain_ollama
 sentence_transformers
 pdfplumber
 chromadb
+2026-05-08T20:16:19.327335112Z Downloading nvidia_nvjitlink-13.0.88-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl (40.7 MB)
+2026-05-08T20:16:19.872248197Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 40.7/40.7 MB 74.7 MB/s  0:00:00
+2026-05-08T20:16:19.876822917Z Downloading nvidia_nvtx-13.0.85-py3-none-manylinux1_x86_64.manylinux_2_5_x86_64.whl (148 kB)
+2026-05-08T20:16:19.886034141Z Downloading setuptools-81.0.0-py3-none-any.whl (1.1 MB)
+2026-05-08T20:16:19.897153783Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.1/1.1 MB 95.2 MB/s  0:00:00
+2026-05-08T20:16:19.900603482Z Downloading networkx-3.6.1-py3-none-any.whl (2.1 MB)
+2026-05-08T20:16:19.917589687Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 126.0 MB/s  0:00:00
+2026-05-08T20:16:19.921242391Z Downloading sympy-1.14.0-py3-none-any.whl (6.3 MB)
+2026-05-08T20:16:19.962339375Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.3/6.3 MB 157.0 MB/s  0:00:00
+2026-05-08T20:16:19.96615137Z Downloading mpmath-1.3.0-py3-none-any.whl (536 kB)
+2026-05-08T20:16:19.974169429Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 536.2/536.2 kB 49.3 MB/s  0:00:00
+2026-05-08T20:16:19.978317408Z Downloading tqdm-4.67.3-py3-none-any.whl (78 kB)
+2026-05-08T20:16:19.986159853Z Downloading typer-0.25.1-py3-none-any.whl (58 kB)
+2026-05-08T20:16:19.99387414Z Downloading annotated_doc-0.0.4-py3-none-any.whl (5.3 kB)
+2026-05-08T20:16:20.001266343Z Downloading shellingham-1.5.4-py2.py3-none-any.whl (9.8 kB)
+2026-05-08T20:16:20.009102368Z Downloading typing_inspection-0.4.2-py3-none-any.whl (14 kB)
+2026-05-08T20:16:20.0164764Z Downloading uvicorn-0.46.0-py3-none-any.whl (70 kB)
+2026-05-08T20:16:20.025149496Z Downloading httptools-0.7.1-cp314-cp314-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (472 kB)
+2026-05-08T20:16:20.038878316Z Downloading uvloop-0.22.1-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (4.3 MB)
+2026-05-08T20:16:20.094363828Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.3/4.3 MB 80.2 MB/s  0:00:00
+2026-05-08T20:16:20.098636776Z Downloading watchfiles-1.1.1-cp314-cp314-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (455 kB)
+2026-05-08T20:16:20.110731709Z Downloading anyio-4.13.0-py3-none-any.whl (114 kB)
+2026-05-08T20:16:20.119714607Z Downloading websocket_client-1.9.0-py3-none-any.whl (82 kB)
+2026-05-08T20:16:20.127153513Z Downloading websockets-16.0-cp314-cp314-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (185 kB)
+2026-05-08T20:16:20.137330227Z Downloading werkzeug-3.1.8-py3-none-any.whl (226 kB)
+2026-05-08T20:16:20.14651509Z Downloading xxhash-3.7.0-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (194 kB)
+2026-05-08T20:16:20.156136724Z Downloading zipp-3.23.1-py3-none-any.whl (10 kB)
+2026-05-08T20:16:20.16426945Z Downloading zstandard-0.25.0-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (5.6 MB)
+2026-05-08T20:16:20.241060019Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.6/5.6 MB 72.7 MB/s  0:00:00
+2026-05-08T20:16:20.245202788Z Downloading flatbuffers-25.12.19-py2.py3-none-any.whl (26 kB)
+2026-05-08T20:16:20.253163913Z Downloading importlib_resources-7.1.0-py3-none-any.whl (37 kB)
+2026-05-08T20:16:20.261481693Z Downloading pycparser-3.0-py3-none-any.whl (48 kB)
+2026-05-08T20:16:20.2697732Z Downloading pyproject_hooks-1.2.0-py3-none-any.whl (10 kB)
+2026-05-08T20:16:20.277429503Z Downloading requests_oauthlib-2.0.0-py2.py3-none-any.whl (24 kB)
+2026-05-08T20:16:20.286727793Z Downloading oauthlib-3.3.1-py3-none-any.whl (160 kB)
+2026-05-08T20:16:22.732784608Z Installing collected packages: pypika, nvidia-cusparselt-cu13, mpmath, flatbuffers, durationpy, cuda-toolkit, zstandard, zipp, xxhash, websockets, websocket-client, uvloop, uuid-utils, urllib3, typing-extensions, triton, tqdm, threadpoolctl, tenacity, sympy, six, shellingham, setuptools, safetensors, rpds-py, regex, pyyaml, python-dotenv, pyproject_hooks, pypdfium2, pygments, pycparser, pybase64, protobuf, Pillow, packaging, overrides, orjson, oauthlib, nvidia-nvtx, nvidia-nvshmem-cu13, nvidia-nvjitlink, nvidia-nccl-cu13, nvidia-curand, nvidia-cufile, nvidia-cuda-runtime, nvidia-cuda-nvrtc, nvidia-cuda-cupti, nvidia-cublas, numpy, networkx, mmh3, mdurl, markupsafe, jsonpointer, joblib, itsdangerous, importlib-resources, idna, httptools, hf-xet, h11, fsspec, filelock, cuda-pathfinder, click, charset-normalizer, certifi, blinker, bcrypt, attrs, annotated-types, annotated-doc, werkzeug, uvicorn, typing-inspection, scipy, requests, referencing, python-dateutil, pydantic-core, opentelemetry-proto, onnxruntime, nvidia-cusparse, nvidia-cufft, nvidia-cudnn-cu13, markdown-it-py, langchain-protocol, jsonpatch, jinja2, importlib-metadata, httpcore, grpcio, googleapis-common-protos, cuda-bindings, cffi, build, anyio, watchfiles, scikit-learn, rich, requests-toolbelt, requests-oauthlib, pydantic, opentelemetry-exporter-otlp-proto-common, opentelemetry-api, nvidia-cusolver, jsonschema-specifications, httpx, flask, cryptography, typer, pydantic-settings, pdfminer.six, opentelemetry-semantic-conventions, ollama, langsmith, kubernetes, jsonschema, joserfc, torch, pdfplumber, opentelemetry-sdk, langchain-core, huggingface-hub, Authlib, tokenizers, opentelemetry-exporter-otlp-proto-grpc, langchain_ollama, transformers, chromadb, sentence_transformers
+2026-05-08T20:17:47.583827855Z 
+2026-05-08T20:17:47.594810257Z Successfully installed Authlib-1.7.2 Pillow-12.2.0 annotated-doc-0.0.4 annotated-types-0.7.0 anyio-4.13.0 attrs-26.1.0 bcrypt-5.0.0 blinker-1.9.0 build-1.5.0 certifi-2026.4.22 cffi-2.0.0 charset-normalizer-3.4.7 chromadb-1.5.9 click-8.3.3 cryptography-48.0.0 cuda-bindings-13.2.0 cuda-pathfinder-1.5.4 cuda-toolkit-13.0.2 durationpy-0.10 filelock-3.29.0 flask-3.1.3 flatbuffers-25.12.19 fsspec-2026.4.0 googleapis-common-protos-1.75.0 grpcio-1.80.0 h11-0.16.0 hf-xet-1.5.0 httpcore-1.0.9 httptools-0.7.1 httpx-0.28.1 huggingface-hub-1.14.0 idna-3.13 importlib-metadata-8.7.1 importlib-resources-7.1.0 itsdangerous-2.2.0 jinja2-3.1.6 joblib-1.5.3 joserfc-1.6.5 jsonpatch-1.33 jsonpointer-3.1.1 jsonschema-4.26.0 jsonschema-specifications-2025.9.1 kubernetes-35.0.0 langchain-core-1.3.3 langchain-protocol-0.0.15 langchain_ollama-1.1.0 langsmith-0.8.3 markdown-it-py-4.2.0 markupsafe-3.0.3 mdurl-0.1.2 mmh3-5.2.1 mpmath-1.3.0 networkx-3.6.1 numpy-2.4.4 nvidia-cublas-13.1.0.3 nvidia-cuda-cupti-13.0.85 nvidia-cuda-nvrtc-13.0.88 nvidia-cuda-runtime-13.0.96 nvidia-cudnn-cu13-9.19.0.56 nvidia-cufft-12.0.0.61 nvidia-cufile-1.15.1.6 nvidia-curand-10.4.0.35 nvidia-cusolver-12.0.4.66 nvidia-cusparse-12.6.3.3 nvidia-cusparselt-cu13-0.8.0 nvidia-nccl-cu13-2.28.9 nvidia-nvjitlink-13.0.88 nvidia-nvshmem-cu13-3.4.5 nvidia-nvtx-13.0.85 oauthlib-3.3.1 ollama-0.6.2 onnxruntime-1.26.0 opentelemetry-api-1.41.1 opentelemetry-exporter-otlp-proto-common-1.41.1 opentelemetry-exporter-otlp-proto-grpc-1.41.1 opentelemetry-proto-1.41.1 opentelemetry-sdk-1.41.1 opentelemetry-semantic-conventions-0.62b1 orjson-3.11.9 overrides-7.7.0 packaging-26.2 pdfminer.six-20251230 pdfplumber-0.11.9 protobuf-6.33.6 pybase64-1.4.3 pycparser-3.0 pydantic-2.13.4 pydantic-core-2.46.4 pydantic-settings-2.14.1 pygments-2.20.0 pypdfium2-5.8.0 pypika-0.51.1 pyproject_hooks-1.2.0 python-dateutil-2.9.0.post0 python-dotenv-1.2.2 pyyaml-6.0.3 referencing-0.37.0 regex-2026.4.4 requests-2.33.1 requests-oauthlib-2.0.0 requests-toolbelt-1.0.0 rich-15.0.0 rpds-py-0.30.0 safetensors-0.7.0 scikit-learn-1.8.0 scipy-1.17.1 sentence_transformers-5.4.1 setuptools-81.0.0 shellingham-1.5.4 six-1.17.0 sympy-1.14.0 tenacity-9.1.4 threadpoolctl-3.6.0 tokenizers-0.22.2 torch-2.11.0 tqdm-4.67.3 transformers-5.8.0 triton-3.6.0 typer-0.25.1 typing-extensions-4.15.0 typing-inspection-0.4.2 urllib3-2.7.0 uuid-utils-0.14.1 uvicorn-0.46.0 uvloop-0.22.1 watchfiles-1.1.1 websocket-client-1.9.0 websockets-16.0 werkzeug-3.1.8 xxhash-3.7.0 zipp-3.23.1 zstandard-0.25.0
+2026-05-08T20:17:47.72643102Z 
+2026-05-08T20:17:47.726455412Z [notice] A new release of pip is available: 25.3 -> 26.1.1
+2026-05-08T20:17:47.726460462Z [notice] To update, run: pip install --upgrade pip
+2026-05-08T20:17:53.362322927Z ==> Uploading build...
+2026-05-08T20:19:53.585300271Z ==> Uploaded in 94.3s. Compression took 25.9s
+2026-05-08T20:19:54.23243036Z ==> Build successful 🎉
+2026-05-08T20:20:08.285222408Z ==> Deploying...
+2026-05-08T20:20:08.409635035Z ==> Setting WEB_CONCURRENCY=1 by default, based on available CPUs in the instance
+2026-05-08T20:22:19.502970457Z ==> No open ports detected, continuing to scan...
+2026-05-08T20:22:19.708774134Z ==> Docs on specifying a port: https://render.com/docs/web-services#port-binding
+2026-05-08T20:22:32.229213543Z ==> Exited with status 127
+2026-05-08T20:22:32.232124658Z ==> Common ways to troubleshoot your deploy: https://render.com/docs/troubleshooting-depl2026-05-08T20:16:19.327335112Z Downloading nvidia_nvjitlink-13.0.88-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl (40.7 MB)
+2026-05-08T20:16:19.872248197Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 40.7/40.7 MB 74.7 MB/s  0:00:00
+2026-05-08T20:16:19.876822917Z Downloading nvidia_nvtx-13.0.85-py3-none-manylinux1_x86_64.manylinux_2_5_x86_64.whl (148 kB)
+2026-05-08T20:16:19.886034141Z Downloading setuptools-81.0.0-py3-none-any.whl (1.1 MB)
+2026-05-08T20:16:19.897153783Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.1/1.1 MB 95.2 MB/s  0:00:00
+2026-05-08T20:16:19.900603482Z Downloading networkx-3.6.1-py3-none-any.whl (2.1 MB)
+2026-05-08T20:16:19.917589687Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 126.0 MB/s  0:00:00
+2026-05-08T20:16:19.921242391Z Downloading sympy-1.14.0-py3-none-any.whl (6.3 MB)
+2026-05-08T20:16:19.962339375Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.3/6.3 MB 157.0 MB/s  0:00:00
+2026-05-08T20:16:19.96615137Z Downloading mpmath-1.3.0-py3-none-any.whl (536 kB)
+2026-05-08T20:16:19.974169429Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 536.2/536.2 kB 49.3 MB/s  0:00:00
+2026-05-08T20:16:19.978317408Z Downloading tqdm-4.67.3-py3-none-any.whl (78 kB)
+2026-05-08T20:16:19.986159853Z Downloading typer-0.25.1-py3-none-any.whl (58 kB)
+2026-05-08T20:16:19.99387414Z Downloading annotated_doc-0.0.4-py3-none-any.whl (5.3 kB)
+2026-05-08T20:16:20.001266343Z Downloading shellingham-1.5.4-py2.py3-none-any.whl (9.8 kB)
+2026-05-08T20:16:20.009102368Z Downloading typing_inspection-0.4.2-py3-none-any.whl (14 kB)
+2026-05-08T20:16:20.0164764Z Downloading uvicorn-0.46.0-py3-none-any.whl (70 kB)
+2026-05-08T20:16:20.025149496Z Downloading httptools-0.7.1-cp314-cp314-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (472 kB)
+2026-05-08T20:16:20.038878316Z Downloading uvloop-0.22.1-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (4.3 MB)
+2026-05-08T20:16:20.094363828Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.3/4.3 MB 80.2 MB/s  0:00:00
+2026-05-08T20:16:20.098636776Z Downloading watchfiles-1.1.1-cp314-cp314-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (455 kB)
+2026-05-08T20:16:20.110731709Z Downloading anyio-4.13.0-py3-none-any.whl (114 kB)
+2026-05-08T20:16:20.119714607Z Downloading websocket_client-1.9.0-py3-none-any.whl (82 kB)
+2026-05-08T20:16:20.127153513Z Downloading websockets-16.0-cp314-cp314-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (185 kB)
+2026-05-08T20:16:20.137330227Z Downloading werkzeug-3.1.8-py3-none-any.whl (226 kB)
+2026-05-08T20:16:20.14651509Z Downloading xxhash-3.7.0-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (194 kB)
+2026-05-08T20:16:20.156136724Z Downloading zipp-3.23.1-py3-none-any.whl (10 kB)
+2026-05-08T20:16:20.16426945Z Downloading zstandard-0.25.0-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (5.6 MB)
+2026-05-08T20:16:20.241060019Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.6/5.6 MB 72.7 MB/s  0:00:00
+2026-05-08T20:16:20.245202788Z Downloading flatbuffers-25.12.19-py2.py3-none-any.whl (26 kB)
+2026-05-08T20:16:20.253163913Z Downloading importlib_resources-7.1.0-py3-none-any.whl (37 kB)
+2026-05-08T20:16:20.261481693Z Downloading pycparser-3.0-py3-none-any.whl (48 kB)
+2026-05-08T20:16:20.2697732Z Downloading pyproject_hooks-1.2.0-py3-none-any.whl (10 kB)
+2026-05-08T20:16:20.277429503Z Downloading requests_oauthlib-2.0.0-py2.py3-none-any.whl (24 kB)
+2026-05-08T20:16:20.286727793Z Downloading oauthlib-3.3.1-py3-none-any.whl (160 kB)
+2026-05-08T20:16:22.732784608Z Installing collected packages: pypika, nvidia-cusparselt-cu13, mpmath, flatbuffers, durationpy, cuda-toolkit, zstandard, zipp, xxhash, websockets, websocket-client, uvloop, uuid-utils, urllib3, typing-extensions, triton, tqdm, threadpoolctl, tenacity, sympy, six, shellingham, setuptools, safetensors, rpds-py, regex, pyyaml, python-dotenv, pyproject_hooks, pypdfium2, pygments, pycparser, pybase64, protobuf, Pillow, packaging, overrides, orjson, oauthlib, nvidia-nvtx, nvidia-nvshmem-cu13, nvidia-nvjitlink, nvidia-nccl-cu13, nvidia-curand, nvidia-cufile, nvidia-cuda-runtime, nvidia-cuda-nvrtc, nvidia-cuda-cupti, nvidia-cublas, numpy, networkx, mmh3, mdurl, markupsafe, jsonpointer, joblib, itsdangerous, importlib-resources, idna, httptools, hf-xet, h11, fsspec, filelock, cuda-pathfinder, click, charset-normalizer, certifi, blinker, bcrypt, attrs, annotated-types, annotated-doc, werkzeug, uvicorn, typing-inspection, scipy, requests, referencing, python-dateutil, pydantic-core, opentelemetry-proto, onnxruntime, nvidia-cusparse, nvidia-cufft, nvidia-cudnn-cu13, markdown-it-py, langchain-protocol, jsonpatch, jinja2, importlib-metadata, httpcore, grpcio, googleapis-common-protos, cuda-bindings, cffi, build, anyio, watchfiles, scikit-learn, rich, requests-toolbelt, requests-oauthlib, pydantic, opentelemetry-exporter-otlp-proto-common, opentelemetry-api, nvidia-cusolver, jsonschema-specifications, httpx, flask, cryptography, typer, pydantic-settings, pdfminer.six, opentelemetry-semantic-conventions, ollama, langsmith, kubernetes, jsonschema, joserfc, torch, pdfplumber, opentelemetry-sdk, langchain-core, huggingface-hub, Authlib, tokenizers, opentelemetry-exporter-otlp-proto-grpc, langchain_ollama, transformers, chromadb, sentence_transformers
+2026-05-08T20:17:47.583827855Z 
+2026-05-08T20:17:47.594810257Z Successfully installed Authlib-1.7.2 Pillow-12.2.0 annotated-doc-0.0.4 annotated-types-0.7.0 anyio-4.13.0 attrs-26.1.0 bcrypt-5.0.0 blinker-1.9.0 build-1.5.0 certifi-2026.4.22 cffi-2.0.0 charset-normalizer-3.4.7 chromadb-1.5.9 click-8.3.3 cryptography-48.0.0 cuda-bindings-13.2.0 cuda-pathfinder-1.5.4 cuda-toolkit-13.0.2 durationpy-0.10 filelock-3.29.0 flask-3.1.3 flatbuffers-25.12.19 fsspec-2026.4.0 googleapis-common-protos-1.75.0 grpcio-1.80.0 h11-0.16.0 hf-xet-1.5.0 httpcore-1.0.9 httptools-0.7.1 httpx-0.28.1 huggingface-hub-1.14.0 idna-3.13 importlib-metadata-8.7.1 importlib-resources-7.1.0 itsdangerous-2.2.0 jinja2-3.1.6 joblib-1.5.3 joserfc-1.6.5 jsonpatch-1.33 jsonpointer-3.1.1 jsonschema-4.26.0 jsonschema-specifications-2025.9.1 kubernetes-35.0.0 langchain-core-1.3.3 langchain-protocol-0.0.15 langchain_ollama-1.1.0 langsmith-0.8.3 markdown-it-py-4.2.0 markupsafe-3.0.3 mdurl-0.1.2 mmh3-5.2.1 mpmath-1.3.0 networkx-3.6.1 numpy-2.4.4 nvidia-cublas-13.1.0.3 nvidia-cuda-cupti-13.0.85 nvidia-cuda-nvrtc-13.0.88 nvidia-cuda-runtime-13.0.96 nvidia-cudnn-cu13-9.19.0.56 nvidia-cufft-12.0.0.61 nvidia-cufile-1.15.1.6 nvidia-curand-10.4.0.35 nvidia-cusolver-12.0.4.66 nvidia-cusparse-12.6.3.3 nvidia-cusparselt-cu13-0.8.0 nvidia-nccl-cu13-2.28.9 nvidia-nvjitlink-13.0.88 nvidia-nvshmem-cu13-3.4.5 nvidia-nvtx-13.0.85 oauthlib-3.3.1 ollama-0.6.2 onnxruntime-1.26.0 opentelemetry-api-1.41.1 opentelemetry-exporter-otlp-proto-common-1.41.1 opentelemetry-exporter-otlp-proto-grpc-1.41.1 opentelemetry-proto-1.41.1 opentelemetry-sdk-1.41.1 opentelemetry-semantic-conventions-0.62b1 orjson-3.11.9 overrides-7.7.0 packaging-26.2 pdfminer.six-20251230 pdfplumber-0.11.9 protobuf-6.33.6 pybase64-1.4.3 pycparser-3.0 pydantic-2.13.4 pydantic-core-2.46.4 pydantic-settings-2.14.1 pygments-2.20.0 pypdfium2-5.8.0 pypika-0.51.1 pyproject_hooks-1.2.0 python-dateutil-2.9.0.post0 python-dotenv-1.2.2 pyyaml-6.0.3 referencing-0.37.0 regex-2026.4.4 requests-2.33.1 requests-oauthlib-2.0.0 requests-toolbelt-1.0.0 rich-15.0.0 rpds-py-0.30.0 safetensors-0.7.0 scikit-learn-1.8.0 scipy-1.17.1 sentence_transformers-5.4.1 setuptools-81.0.0 shellingham-1.5.4 six-1.17.0 sympy-1.14.0 tenacity-9.1.4 threadpoolctl-3.6.0 tokenizers-0.22.2 torch-2.11.0 tqdm-4.67.3 transformers-5.8.0 triton-3.6.0 typer-0.25.1 typing-extensions-4.15.0 typing-inspection-0.4.2 urllib3-2.7.0 uuid-utils-0.14.1 uvicorn-0.46.0 uvloop-0.22.1 watchfiles-1.1.1 websocket-client-1.9.0 websockets-16.0 werkzeug-3.1.8 xxhash-3.7.0 zipp-3.23.1 zstandard-0.25.0
+2026-05-08T20:17:47.72643102Z 
+2026-05-08T20:17:47.726455412Z [notice] A new release of pip is available: 25.3 -> 26.1.1
+2026-05-08T20:17:47.726460462Z [notice] To update, run: pip install --upgrade pip
+2026-05-08T20:17:53.362322927Z ==> Uploading build...
+2026-05-08T20:19:53.585300271Z ==> Uploaded in 94.3s. Compression took 25.9s
+2026-05-08T20:19:54.23243036Z ==> Build successful 🎉
+2026-05-08T20:20:08.285222408Z ==> Deploying...
+2026-05-08T20:20:08.409635035Z ==> Setting WEB_CONCURRENCY=1 by default, based on available CPUs in the instance
+2026-05-08T20:22:19.502970457Z ==> No open ports detected, continuing to scan...
+2026-05-08T20:22:19.708774134Z ==> Docs on specifying a port: https://render.com/docs/web-services#port-binding
+2026-05-08T20:22:32.229213543Z ==> Exited with status 127
+2026-05-08T20:22:32.232124658Z ==> Common ways to troubleshoot your deploy: https://render.com/docs/troubleshooting-deploysoys
