@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroMind Chat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+    <style>
+        :root {
+            --green-dark: #1a3a0f;
+            --green-mid: #2d5a1b;
+            --green-bright: #4a8c2a;
+            --green-accent: #7bc142;
+            --gold: #f0c040;
+            --gold-light: #fde68a;
+            --cream: #faf7f0;
+            --dark: #0e1f08;
+            --text-muted: #6b7c5e;
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--cream);
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ─── NAV ─── */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 18px 6vw;
+            background: rgba(26,58,15,0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(123,193,66,0.15);
+        }
+
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--white);
+            display: flex; align-items: center; gap: 10px;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .nav-logo:hover { opacity: 0.9; }
+        .nav-logo .leaf { font-size: 1.6rem; }
+
+        .nav-center {
+            display: flex; align-items: center; gap: 32px;
+            margin-left: auto;
+        }
+
+        .user-chip {
+            color: rgba(255,255,255,0.85);
+            font-size: 0.86rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 100px;
+            padding: 7px 14px;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .nav-back {
+            color: rgba(255,255,255,0.7) !important;
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 8px 16px;
+            border-radius: 100px;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .nav-back:hover { 
+            border-color: rgba(255,255,255,0.4);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .logout-btn {
+            background: transparent;
+            color: rgba(255,255,255,0.75);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 100px;
+            padding: 8px 14px;
+            font-size: 0.86rem;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .logout-btn:hover {
+            border-color: rgba(255,255,255,0.45);
+            background: rgba(255,255,255,0.08);
+        }
+
+        /* ─── CHAT CONTAINER ─── */
+        #chat-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            margin-top: 80px;
+            margin-left: 240px;
+            background: linear-gradient(135deg, var(--cream) 0%, #f5fef0 100%);
+            position: relative;
+            overflow: hidden;
+            min-height: 0;
+            height: calc(100vh - 80px);
+        }
+
+        #chat-wrapper::before {
+            content: '';
+            position: absolute; top: -10%; right: -5%;
+            width: 400px; height: 400px;
+            background: radial-gradient(ellipse, rgba(74,140,42,0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        #chat-container {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 40px 6vw 140px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: relative;
+            z-index: 1;
+            justify-content: flex-end;
+            align-items: stretch;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+            min-height: 0;
+        }
+
+        #chat-toolbar {
+            display: none;
+        }
+
+        #thread-select {
+            min-width: 210px;
+            border: 1px solid rgba(123,193,66,0.25);
+            border-radius: 999px;
+            padding: 9px 14px;
+            background: #fff;
+            color: var(--green-dark);
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .toolbar-btn {
+            border: 1px solid rgba(123,193,66,0.25);
+            background: #fff;
+            color: var(--green-dark);
+            border-radius: 999px;
+            padding: 9px 14px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        /* Sidebar action buttons (reference style) */
+        .sidebar-action {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 9px;
+            background: linear-gradient(180deg,#10280a,#15320c);
+            border: 1px solid rgba(123,193,66,0.14);
+            color: #fff;
+            font-size: 1rem;
+            text-decoration: none;
+            justify-content: flex-start;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+            transition: transform 0.12s ease, border-color 0.12s ease;
+        }
+        .sidebar-action .icon { width: 28px; text-align: center; font-size: 1.1rem; }
+        .sidebar-action span.label { flex: 1; text-align: left; font-weight:600; }
+        .sidebar-action:hover { transform: translateY(-3px); border-color: rgba(123,193,66,0.2); }
+
+        .toolbar-btn:hover {
+            border-color: var(--green-accent);
+            background: #f0f9e4;
+        }
+
+        .date-divider {
+            align-self: center;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            background: rgba(123,193,66,0.12);
+            border: 1px solid rgba(123,193,66,0.22);
+            border-radius: 999px;
+            padding: 6px 12px;
+            margin: 8px 0;
+        }
+
+        /* Welcome message */
+        .welcome-box {
+            text-align: center;
+            padding: 80px 24px 40px;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .welcome-icon {
+            font-size: 4rem;
+            margin-bottom: 24px;
+        }
+
+        .welcome-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--green-dark);
+            margin-bottom: 12px;
+        }
+
+        .welcome-subtitle {
+            font-size: 1rem;
+            color: var(--text-muted);
+            max-width: 500px;
+            line-height: 1.7;
+        }
+
+        /* Messages */
+        .message {
+            display: flex;
+            gap: 12px;
+            animation: messageSlide 0.3s ease-out;
+            max-width: 100%;
+            width: 100%;
+            margin: 0;
+        }
+
+        /* Make each message span the full available width so user bubbles
+           can align to the rightmost edge of the chat column. */
+        .message {
+            width: 100%;
+        }
+
+        .message-content {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-width: calc(100% - 48px);
+            width: calc(100% - 48px);
+        }
+
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+        }
+
+        /* Ensure user message content aligns to the right edge */
+        .message.user .message-content {
+            align-items: flex-end;
+            width: calc(100% - 48px);
+        }
+
+        .message.user .bubble {
+            margin-left: auto;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .avatar.bot {
+            background: linear-gradient(135deg, var(--green-bright), var(--green-accent));
+            color: white;
+        }
+
+        .avatar.user {
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            color: var(--green-dark);
+        }
+
+        .message-content {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-width: calc(100% - 48px);
+        }
+
+        .message.user .message-content {
+            align-items: flex-end;
+        }
+
+        .bubble {
+            padding: 14px 18px;
+            border-radius: 16px;
+            line-height: 1.6;
+            font-size: 0.95rem;
+            word-wrap: break-word;
+        }
+
+        .bubble.bot {
+            background: rgba(255,255,255,0.7);
+            border: 1px solid rgba(123,193,66,0.2);
+            color: var(--dark);
+            border-bottom-left-radius: 4px;
+        }
+
+        .bubble.user {
+            background: var(--gold);
+            color: var(--green-dark);
+            border-bottom-right-radius: 4px;
+            font-weight: 500;
+        }
+
+        .bubble.thinking {
+            background: rgba(123,193,66,0.1);
+            color: var(--text-muted);
+            font-style: italic;
+            border: 1px solid rgba(123,193,66,0.2);
+        }
+
+        .message img {
+            max-width: 200px;
+            border-radius: 12px;
+            border: 2px solid rgba(123,193,66,0.2);
+            margin-top: 8px;
+        }
+
+        /* ─── INPUT AREA ─── */
+        #input-area {
+            background: var(--white);
+            border-top: 1px solid rgba(123,193,66,0.1);
+            padding: 20px 6vw;
+            position: fixed;
+            bottom: 0;
+            left: 240px;
+            right: 0;
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #input-area > * {
+            width: 100%;
+            max-width: 900px;
+        }
+
+        #image-preview {
+            display: none;
+            margin-bottom: 12px;
+            position: relative;
+            width: fit-content;
+        }
+
+        #image-preview img {
+            height: 90px;
+            border-radius: 12px;
+            border: 2px solid var(--green-accent);
+            box-shadow: 0 4px 12px rgba(74,140,42,0.15);
+        }
+
+        #image-preview button {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            transition: transform 0.2s, background 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        #image-preview button:hover {
+            background: #dc2626;
+            transform: scale(1.1);
+        }
+
+        #input-row {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+        }
+
+        #query-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid rgba(123,193,66,0.2);
+            border-radius: 100px;
+            font-size: 0.95rem;
+            outline: none;
+            resize: none;
+            max-height: 120px;
+            font-family: inherit;
+            background: var(--cream);
+            color: var(--dark);
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        #query-input:focus {
+            border-color: var(--green-accent);
+            background: var(--white);
+            box-shadow: 0 0 0 3px rgba(123,193,66,0.1);
+        }
+
+        .icon-btn {
+            background: none;
+            border: 1px solid rgba(123,193,66,0.2);
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: border-color 0.2s, background 0.2s;
+            color: var(--green-mid);
+        }
+
+        .icon-btn:hover {
+            background: rgba(123,193,66,0.1);
+            border-color: var(--green-accent);
+        }
+
+        #send-btn {
+            background: linear-gradient(135deg, var(--green-bright), var(--green-accent));
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 12px rgba(74,140,42,0.25);
+        }
+
+        #send-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74,140,42,0.35);
+        }
+
+        #send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* ─── SCROLLBAR ─── */
+        #chat-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #chat-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        #chat-container::-webkit-scrollbar-thumb {
+            background: rgba(123,193,66,0.2);
+            border-radius: 4px;
+        }
+
+        #chat-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(123,193,66,0.3);
+        }
+
+        /* Sidebar history scrollbar */
+        #history-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #history-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        #history-container::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.15);
+            border-radius: 3px;
+        }
+
+        #history-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 768px) {
+            .nav-center { gap: 16px; }
+            #chat-container { padding: 20px 16px 120px; }
+            #input-area { left: 0; padding: 14px; }
+            #chat-wrapper { margin-left: 0; }
+        }
+    </style>
+</head>
+<body data-thread-id="{{ current_thread_id or '' }}" data-anon-remaining="{{ anon_remaining or 0 }}">
+
+<!-- NAV -->
+<nav>
+    <a href="/" class="nav-logo">
+        <span class="leaf">🌿</span> AgroMind
+    </a>
+    <div class="nav-center">
+        <a href="/" class="nav-back">← Back to Home</a>
+        {% if username %}
+            <form method="post" action="/logout" style="margin: 0;">
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
+        {% else %}
+            <a href="/login" id="top-login-link" class="nav-back">Log in</a>
+        {% endif %}
+    </div>
+</nav>
+
+<!-- CHAT WRAPPER -->
+<!-- LEFT SIDEBAR / PROFILE AREA -->
+<aside id="left-sidebar" style="position:fixed; left:0; top:72px; bottom:0; width:240px; background: linear-gradient(180deg, rgba(26,58,15,0.98) 0%, rgba(14,31,8,0.99) 100%); color: #fff; padding:20px; display:flex; flex-direction:column; gap:0; overflow-y: auto; border-right: 1px solid rgba(123,193,66,0.15);">
+    
+    <!-- Sidebar header removed; profile moved to bottom widget -->
+
+    <!-- Quick Actions -->
+    <button id="sidebar-new-chat" class="toolbar-btn" style="width:100%; text-align:center; background:rgba(123,193,66,0.12); color:#7bc142; border: 1px solid rgba(123,193,66,0.25); margin-bottom:12px; font-size: 0.9rem; border-radius: 8px; padding: 10px; font-weight: 500; transition: all 0.2s;">➕ New Chat</button>
+    
+    <!-- Chat History Section -->
+    <div style="font-size: 0.7rem; color: rgba(255,255,255,0.4); font-weight: 700; text-transform: uppercase; margin: 14px 0 10px; letter-spacing: 0.8px;">Chat History</div>
+    <div id="history-container" style="flex: 1; overflow-y: auto; margin-bottom: 16px; display: flex; flex-direction: column; gap: 6px;">
+        <!-- Dynamically populated -->
+    </div>
+
+    <div style="border-top: 1px solid rgba(123,193,66,0.2); padding-top: 14px; display: flex; flex-direction: column; gap: 10px;">
+        <!-- Clear All Button -->
+        <button id="sidebar-clear-all" class="toolbar-btn" style="width:100%; text-align:center; background: rgba(123,193,66,0.12); color: var(--green-accent); border: 1px solid rgba(123,193,66,0.25); font-size: 0.9rem; border-radius: 8px; padding: 10px; font-weight: 500; transition: all 0.2s;" title="Clear all chat history">🗑️ Clear All</button>
+
+        <div style="position:relative; margin-top:6px;">
+            {% if username %}
+            <button id="bottom-profile" type="button" style="width:100%; display:flex; align-items:center; gap:10px; background:rgba(255,255,255,0.95); padding:10px 12px; border-radius:18px; box-shadow:0 6px 18px rgba(0,0,0,0.12); border:none; cursor:pointer; text-align:left;">
+                <div id="bottom-avatar" style="width:40px; height:40px; border-radius:50%; background:var(--green-accent); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.95rem; flex-shrink:0;">{{ username[:1]|upper }}</div>
+                <div style="display:flex; flex-direction:column; min-width:0; flex:1;">
+                    <div id="bottom-name" style="font-weight:700; color:var(--dark); font-size:0.9rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ username }}</div>
+                    <div id="bottom-plan" style="font-size:0.72rem; color:var(--text-muted);">Free plan</div>
+                </div>
+                <div style="color:var(--text-muted); font-size:0.8rem;">▾</div>
+            </button>
+            <div id="profile-menu" style="display:none; position:absolute; left:0; right:0; bottom:calc(100% + 8px); background:#fff; border:1px solid rgba(123,193,66,0.18); border-radius:14px; box-shadow:0 14px 30px rgba(0,0,0,0.14); overflow:hidden; z-index:40;">
+                <a href="/profile" id="view-profile-link" style="display:flex; align-items:center; gap:10px; padding:12px 14px; color:var(--dark); text-decoration:none; font-size:0.9rem; border-bottom:1px solid rgba(123,193,66,0.08);">
+                    <span>👤</span>
+                    <span>View Profile</span>
+                </a>
+                <form method="post" action="/logout" style="margin:0;">
+                    <button type="submit" style="width:100%; display:flex; align-items:center; gap:10px; padding:12px 14px; background:#fff; border:none; color:#b42318; font-size:0.9rem; cursor:pointer; text-align:left;">
+                        <span>🚪</span>
+                        <span>Logout</span>
+                    </button>
+                </form>
+            </div>
+            {% else %}
+            <a href="/login" id="bottom-profile" style="width:100%; display:flex; align-items:center; gap:10px; background:rgba(255,255,255,0.95); padding:10px 12px; border-radius:18px; box-shadow:0 6px 18px rgba(0,0,0,0.12); border:none; cursor:pointer; text-align:left; text-decoration:none;">
+                <div id="bottom-avatar" style="width:40px; height:40px; border-radius:50%; background:var(--gold); color:var(--green-dark); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.95rem; flex-shrink:0;">?</div>
+                <div style="display:flex; flex-direction:column; min-width:0; flex:1;">
+                    <div id="bottom-name" style="font-weight:700; color:var(--dark); font-size:0.9rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Log in</div>
+                    <div id="bottom-plan" style="font-size:0.72rem; color:var(--text-muted);">See profile & save chats</div>
+                </div>
+                <div style="color:var(--text-muted); font-size:0.8rem;">↗</div>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</aside>
+<div id="chat-wrapper">
+    <!-- Thread toolbar only if logged in -->
+    {% if username %}
+    <div id="chat-toolbar">
+        <select id="thread-select"></select>
+        <button type="button" class="toolbar-btn" id="clear-thread-btn">Clear Chat</button>
+    </div>
+    {% endif %}
+    <div id="chat-container">
+        <div class="welcome-box">
+            <div class="welcome-icon">🌾</div>
+            <div class="welcome-title">Welcome to AgroMind</div>
+            <div class="welcome-subtitle">
+                Ask me anything about agriculture, farming, crops, irrigation, soil health, and pest management. I'm here to help!
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- INPUT AREA -->
+<div id="input-area">
+    <div id="image-preview"></div>
+    <div id="input-row">
+        <input
+            type="text"
+            id="query-input"
+            placeholder="Ask about crops, irrigation, soil, pests... 🌱"
+            autocomplete="off"
+        />
+        <button type="button" class="icon-btn" id="upload-btn" title="Upload image">
+            📸
+        </button>
+        <button type="button" id="send-btn" title="Send message">
+            ➤
+        </button>
+    </div>
+</div>
+
+<input type="file" id="file-input" style="display: none;" accept="image/*" />
+
+<script>
+const chatContainer = document.getElementById("chat-container");
+const queryInput = document.getElementById("query-input");
+const sendBtn = document.getElementById("send-btn");
+const uploadBtn = document.getElementById("upload-btn");
+const fileInput = document.getElementById("file-input");
+const imagePreview = document.getElementById("image-preview");
+const threadSelect = document.getElementById("thread-select");
+const clearThreadBtn = document.getElementById("clear-thread-btn");
+const sidebarClearAll = document.getElementById("sidebar-clear-all");
+const sidebarNewChat = document.getElementById("sidebar-new-chat");
+const historyContainer = document.getElementById("history-container");
+const anonStatus = document.getElementById("anon-status");
+const bottomProfile = document.getElementById("bottom-profile");
+const profileMenu = document.getElementById("profile-menu");
+
+let imageB64 = null;
+let activeThreadId = Number(document.body.dataset.threadId || "") || null;
+
+function closeProfileMenu() {
+    if (profileMenu) {
+        profileMenu.style.display = "none";
+    }
+}
+
+function toggleProfileMenu() {
+    if (!profileMenu) return;
+    profileMenu.style.display = profileMenu.style.display === "block" ? "none" : "block";
+}
+
+if (bottomProfile && profileMenu) {
+    bottomProfile.addEventListener("click", (event) => {
+        event.stopPropagation();
+        toggleProfileMenu();
+    });
+
+    profileMenu.addEventListener("click", (event) => {
+        event.stopPropagation();
+    });
+
+    document.addEventListener("click", closeProfileMenu);
+}
+
+function clearMessagesUI() {
+    chatContainer.innerHTML = "";
+}
+
+function addDateDivider(label) {
+    const div = document.createElement("div");
+    div.className = "date-divider";
+    div.textContent = label;
+    chatContainer.appendChild(div);
+}
+
+function showWelcomeIfEmpty() {
+    if (chatContainer.children.length > 0) return;
+    const box = document.createElement("div");
+    box.className = "welcome-box";
+    box.innerHTML = `
+        <div class="welcome-icon">🌾</div>
+        <div class="welcome-title">Welcome to AgroMind</div>
+        <div class="welcome-subtitle">
+            Ask me anything about agriculture, farming, crops, irrigation, soil health, and pest management. I'm here to help!
+        </div>
+    `;
+    chatContainer.appendChild(box);
+}
+
+async function loadThreads() {
+    const response = await fetch("/api/threads");
+    if (!response.ok) return;
+    const data = await response.json();
+    const threads = data.threads || [];
+
+    if (data.current_thread_id) {
+        activeThreadId = data.current_thread_id;
+    }
+
+    threadSelect.innerHTML = "";
+    threads.forEach((thread) => {
+        const option = document.createElement("option");
+        option.value = thread.id;
+        option.textContent = `${thread.title} (${thread.message_count})`;
+        threadSelect.appendChild(option);
+    });
+
+    if (activeThreadId) {
+        threadSelect.value = String(activeThreadId);
+    } else if (threads.length > 0) {
+        activeThreadId = threads[0].id;
+        threadSelect.value = String(activeThreadId);
+    }
+
+    // Populate sidebar history
+    historyContainer.innerHTML = "";
+    if (threads.length === 0) {
+        const noChat = document.createElement("div");
+        noChat.style.cssText = "text-align: center; font-size: 0.8rem; color: rgba(255,255,255,0.4); padding: 12px 0;";
+        noChat.textContent = "No chats yet";
+        historyContainer.appendChild(noChat);
+    } else {
+        threads.forEach((thread) => {
+            const item = document.createElement("div");
+            item.style.cssText = "display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: rgba(255,255,255,0.8); padding: 8px 10px; border-radius: 8px; transition: background 0.2s;";
+
+            const titleBtn = document.createElement("button");
+            titleBtn.type = "button";
+            titleBtn.style.cssText = "flex: 1; text-align: left; background: transparent; border: none; color: inherit; cursor: pointer; font-size: 0.85rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0;";
+            titleBtn.textContent = thread.title;
+            titleBtn.title = thread.title;
+
+            const renameBtn = document.createElement("button");
+            renameBtn.type = "button";
+            renameBtn.textContent = "✎";
+            renameBtn.title = "Rename chat";
+            renameBtn.style.cssText = "flex-shrink: 0; width: 28px; height: 28px; border-radius: 999px; border: 1px solid rgba(123,193,66,0.25); background: rgba(123,193,66,0.08); color: var(--green-accent); cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; justify-content: center;";
+            
+            if (thread.id === activeThreadId) {
+                item.style.background = "rgba(123,193,66,0.15)";
+                item.style.borderColor = "rgba(123,193,66,0.3)";
+                item.style.color = "rgba(255,255,255,1)";
+            }
+
+            titleBtn.addEventListener("click", async () => {
+                activeThreadId = thread.id;
+                await fetch("/api/select-thread", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ thread_id: activeThreadId })
+                });
+                await loadThreads();
+                await loadHistory();
+            });
+
+            renameBtn.addEventListener("click", async (event) => {
+                event.stopPropagation();
+                const nextTitle = prompt("Rename this chat:", thread.title);
+                if (!nextTitle) return;
+
+                const response = await fetch("/api/threads/rename", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ thread_id: thread.id, title: nextTitle })
+                });
+
+                if (!response.ok) {
+                    alert("Unable to rename chat.");
+                    return;
+                }
+
+                await loadThreads();
+            });
+
+            item.addEventListener("mouseover", () => {
+                item.style.background = "rgba(255,255,255,0.08)";
+            });
+            item.addEventListener("mouseout", () => {
+                if (thread.id !== activeThreadId) {
+                    item.style.background = "rgba(255,255,255,0.04)";
+                }
+            });
+
+            item.appendChild(titleBtn);
+            item.appendChild(renameBtn);
+            historyContainer.appendChild(item);
+        });
+    }
+}
+
+async function loadHistory() {
+    try {
+        if (!activeThreadId) {
+            clearMessagesUI();
+            showWelcomeIfEmpty();
+            return;
+        }
+
+        const response = await fetch(`/api/history?thread_id=${activeThreadId}`);
+        if (!response.ok) return;
+        const data = await response.json();
+        const groups = data.groups || [];
+
+        clearMessagesUI();
+
+        groups.forEach((group) => {
+            addDateDivider(group.date);
+            (group.messages || []).forEach((item) => {
+                appendMessage("user", item.query);
+                appendMessage("bot", item.answer);
+            });
+        });
+
+        showWelcomeIfEmpty();
+    } catch (err) {
+        console.error("Unable to load chat history", err);
+    }
+}
+
+// Auto-resize textarea
+queryInput.addEventListener("input", () => {
+    queryInput.style.height = "auto";
+    queryInput.style.height = Math.min(queryInput.scrollHeight, 120) + "px";
+});
+
+// Send on Enter (Shift+Enter for newline)
+queryInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        handleSend();
+    }
+});
+
+// Upload image
+uploadBtn.addEventListener("click", () => fileInput.click());
+
+fileInput.addEventListener("change", async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+        imageB64 = event.target.result;
+        showImagePreview(imageB64);
+    };
+    reader.readAsDataURL(file);
+});
+
+function showImagePreview(b64) {
+    const preview = document.createElement("div");
+    preview.style.position = "relative";
+    preview.style.width = "fit-content";
+
+    const img = document.createElement("img");
+    img.src = b64;
+    img.style.height = "90px";
+    img.style.borderRadius = "12px";
+    img.style.border = "2px solid var(--green-accent)";
+    img.style.boxShadow = "0 4px 12px rgba(74,140,42,0.15)";
+
+    const btn = document.createElement("button");
+    btn.textContent = "✕";
+    btn.type = "button";
+    btn.style.position = "absolute";
+    btn.style.top = "-8px";
+    btn.style.right = "-8px";
+    btn.style.background = "#ef4444";
+    btn.style.color = "white";
+    btn.style.border = "none";
+    btn.style.borderRadius = "50%";
+    btn.style.width = "28px";
+    btn.style.height = "28px";
+    btn.style.cursor = "pointer";
+    btn.style.display = "flex";
+    btn.style.alignItems = "center";
+    btn.style.justifyContent = "center";
+    btn.style.fontSize = "0.8rem";
+    btn.style.boxShadow = "0 2px 8px rgba(0,0,0,0.2)";
+
+    btn.addEventListener("click", clearImage);
+    btn.addEventListener("mouseover", () => btn.style.background = "#dc2626");
+    btn.addEventListener("mouseout", () => btn.style.background = "#ef4444");
+
+    preview.appendChild(img);
+    preview.appendChild(btn);
+    imagePreview.innerHTML = "";
+    imagePreview.appendChild(preview);
+    imagePreview.style.display = "block";
+}
+
+function clearImage() {
+    imageB64 = null;
+    imagePreview.style.display = "none";
+    imagePreview.innerHTML = "";
+    fileInput.value = "";
+}
+
+function appendMessage(role, text, imageSrc = null) {
+    const msg = document.createElement("div");
+    msg.className = `message ${role}`;
+
+    const avatar = document.createElement("div");
+    avatar.className = `avatar ${role}`;
+    avatar.textContent = role === "user" ? "👨" : "🤖";
+
+    const content = document.createElement("div");
+    content.className = "message-content";
+
+    const bubble = document.createElement("div");
+    bubble.className = `bubble ${role === "thinking" ? "thinking" : role}`;
+    bubble.textContent = text;
+
+    content.appendChild(bubble);
+
+    if (imageSrc && role === "user") {
+        const img = document.createElement("img");
+        img.src = imageSrc;
+        content.appendChild(img);
+    }
+
+    msg.appendChild(avatar);
+    msg.appendChild(content);
+    chatContainer.appendChild(msg);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+
+    return msg;
+}
+
+async function handleSend() {
+    const query = queryInput.value.trim();
+    if (!query) return;
+
+    sendBtn.disabled = true;
+
+    const imgSrc = imageB64 ? imageB64 : null;
+    appendMessage("user", query, imgSrc);
+
+    queryInput.value = "";
+    queryInput.style.height = "auto";
+    clearImage();
+
+    const thinkingDiv = appendMessage("bot thinking", "AgroMind is thinking...");
+
+    try {
+        const res = await fetch("/api/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ query, image: imageB64, thread_id: activeThreadId })
+        });
+        const data = await res.json();
+
+        // If server indicates auth required after anon quota
+        if (res.status === 403 || (data && data.error === "auth_required")) {
+            thinkingDiv.className = "message bot";
+            thinkingDiv.querySelector(".bubble").className = "bubble bot";
+            thinkingDiv.querySelector(".bubble").textContent = data.message || "Please login to continue.";
+            const go = confirm("You've reached the free query limit. Log in to continue.\n\nPress OK to go to the login page.");
+            if (go) window.location.href = '/login';
+            sendBtn.disabled = false;
+            return;
+        }
+
+        thinkingDiv.className = "message bot";
+        thinkingDiv.querySelector(".bubble").className = "bubble bot";
+        thinkingDiv.querySelector(".bubble").textContent = data.answer || data.error;
+        // show remaining anon queries if provided
+        if (data && typeof data.remaining !== 'undefined') {
+            document.body.dataset.anonRemaining = String(data.remaining);
+            if (anonStatus) {
+                anonStatus.textContent = `${data.remaining} ${data.remaining === 1 ? 'query' : 'queries'} left`;
+            }
+        }
+    } catch (err) {
+        thinkingDiv.className = "message bot";
+        thinkingDiv.querySelector(".bubble").className = "bubble bot";
+        thinkingDiv.querySelector(".bubble").textContent = "Something went wrong. Please try again.";
+    }
+
+    sendBtn.disabled = false;
+    queryInput.focus();
+}
+
+sendBtn.addEventListener("click", handleSend);
+
+// Thread select only exists for logged-in users
+if (threadSelect) {
+    threadSelect.addEventListener("change", async () => {
+        activeThreadId = Number(threadSelect.value);
+        await fetch("/api/select-thread", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ thread_id: activeThreadId })
+        });
+        loadHistory();
+    });
+}
+
+// Clear thread button only exists for logged-in users
+if (clearThreadBtn) {
+    clearThreadBtn.addEventListener("click", async () => {
+        if (!activeThreadId) return;
+        const confirmed = window.confirm("Clear all messages in this chat thread?");
+        if (!confirmed) return;
+        await fetch("/api/history/clear", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ scope: "thread", thread_id: activeThreadId })
+        });
+        await loadThreads();
+        clearMessagesUI();
+        showWelcomeIfEmpty();
+    });
+}
+
+// Clear all button for sidebar
+if (sidebarClearAll) {
+    sidebarClearAll.addEventListener("click", async () => {
+        const confirmed = window.confirm("Clear all your chats? This will delete everything permanently.");
+        if (!confirmed) return;
+        const res = await fetch('/api/history/clear', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ scope: 'all' })
+        });
+        if (res.ok) {
+            await loadThreads();
+            clearMessagesUI();
+            showWelcomeIfEmpty();
+        } else if (res.status === 401 || res.status === 302) {
+            // Not logged in - prompt to login
+            if (confirm('You must be logged in to clear all chats. Log in now?')) {
+                window.location.href = '/login';
+            }
+        } else {
+            alert('Unable to clear chats.');
+        }
+    });
+}
+
+// Sidebar new chat wiring: redirect to create new thread if logged in, otherwise show message
+sidebarNewChat.addEventListener('click', async () => {
+    const res = await fetch('/api/anon-status');
+    const info = await res.json();
+    if (info.logged_in) {
+        await fetch('/api/threads', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({}) });
+        await loadThreads();
+        clearMessagesUI();
+        showWelcomeIfEmpty();
+    } else {
+        alert('Create chats and save history by logging in.');
+    }
+});
+
+async function boot() {
+    // Check if user is logged in
+    const res = await fetch('/api/anon-status');
+    const info = await res.json();
+    
+    if (info.logged_in) {
+        // Load threads and history if logged in
+        await loadThreads();
+        await loadHistory();
+    } else {
+        // For anonymous users, just show welcome
+        showWelcomeIfEmpty();
+        // Update anon status display
+        if (anonStatus) {
+            anonStatus.textContent = `${info.remaining} ${info.remaining === 1 ? 'query' : 'queries'} left`;
+        }
+    }
+}
+
+boot();
+
+// Focus on load
+queryInput.focus();
+</script>
+
+</body>
+</html>

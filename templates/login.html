@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AgroMind Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --green-dark: #1a3a0f;
+      --green-mid: #2d5a1b;
+      --green-bright: #4a8c2a;
+      --green-accent: #7bc142;
+      --gold: #f0c040;
+      --gold-light: #fde68a;
+      --cream: #faf7f0;
+      --dark: #0e1f08;
+      --text-muted: #6b7c5e;
+      --white: #ffffff;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body { height: 100%; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--green-dark);
+      color: var(--white);
+      overflow: hidden;
+    }
+
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 22px 4.5vw;
+      position: relative;
+      background: linear-gradient(135deg, var(--green-dark) 0%, #0e2a06 60%, #1a3a0f 100%);
+      overflow: hidden;
+    }
+
+    #hero::before {
+      content: '';
+      position: absolute; top: -18%; right: -10%;
+      width: 620px; height: 620px;
+      background: radial-gradient(ellipse, rgba(74,140,42,0.24) 0%, transparent 70%);
+      border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
+    }
+
+    #hero::after {
+      content: '';
+      position: absolute; bottom: -12%; left: 4%;
+      width: 420px; height: 420px;
+      background: radial-gradient(ellipse, rgba(240,192,64,0.08) 0%, transparent 70%);
+      border-radius: 40% 60% 45% 55% / 60% 40% 60% 40%;
+    }
+
+    .dot-grid {
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle, rgba(123,193,66,0.1) 1px, transparent 1px);
+      background-size: 30px 30px;
+      pointer-events: none;
+      opacity: 0.85;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap: 28px;
+      align-items: center;
+    }
+
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .hero-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: var(--white);
+      text-decoration: none;
+      width: fit-content;
+    }
+
+    .hero-logo .leaf { font-size: 1.55rem; }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      background: rgba(123,193,66,0.14);
+      border: 1px solid rgba(123,193,66,0.26);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--green-accent);
+      font-weight: 500;
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green-accent);
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.6rem, 4.8vw, 4rem);
+      line-height: 1.04;
+      letter-spacing: -0.04em;
+      font-weight: 900;
+      color: var(--white);
+      max-width: 520px;
+    }
+
+    .hero-title .accent { color: var(--gold); display: block; }
+
+    .hero-subtitle {
+      max-width: 430px;
+      color: rgba(255,255,255,0.68);
+      font-size: 0.98rem;
+      line-height: 1.35;
+      margin-top: 4px;
+    }
+
+    .card-shell {
+      margin-top: 8px;
+      border-radius: 28px;
+      padding: 4px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(123,193,66,0.18);
+      box-shadow: 0 18px 42px rgba(0,0,0,0.18);
+      max-width: 470px;
+    }
+
+    .auth-card {
+      border-radius: 24px;
+      padding: 18px;
+      background: rgba(16, 51, 9, 0.88);
+      border: 1px solid rgba(123,193,66,0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    .auth-card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.45rem;
+      margin-bottom: 6px;
+      color: var(--white);
+    }
+
+    .auth-card .sub {
+      color: rgba(255,255,255,0.72);
+      font-size: 0.92rem;
+      line-height: 1.35;
+      margin-bottom: 12px;
+    }
+
+    .error {
+      background: rgba(239,68,68,0.14);
+      border: 1px solid rgba(239,68,68,0.35);
+      color: #fecaca;
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+    }
+
+    .field { margin-bottom: 10px; }
+
+    .field.error-field input {
+      border-color: rgba(239,68,68,0.65);
+      box-shadow: 0 0 0 3px rgba(239,68,68,0.10);
+    }
+
+    .field-hint {
+      margin-top: 6px;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.62);
+    }
+
+    label {
+      display: block;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.84);
+      margin-bottom: 4px;
+      font-weight: 500;
+    }
+
+    input {
+      width: 100%;
+      border: 1px solid rgba(123,193,66,0.22);
+      background: rgba(255,255,255,0.08);
+      color: var(--white);
+      border-radius: 14px;
+      padding: 10px 14px;
+      font-size: 0.92rem;
+      outline: none;
+    }
+
+    input::placeholder { color: rgba(255,255,255,0.45); }
+
+    input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(240,192,64,0.16);
+    }
+
+    .google-btn,
+    .email-btn {
+      width: 100%;
+      border: none;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+
+    .google-btn {
+      background: #ffffff;
+      color: #2e2a1d;
+      border: 1px solid rgba(0,0,0,0.08);
+      box-shadow: 0 10px 22px rgba(0,0,0,0.12);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .google-btn:hover,
+    .email-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .google-mark {
+      display: inline-grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
+      width: 16px;
+      height: 16px;
+      flex: none;
+    }
+
+    .google-mark span {
+      display: block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+    }
+
+    .google-mark .blue { background: #4285f4; }
+    .google-mark .red { background: #ea4335; }
+    .google-mark .yellow { background: #fbbc05; }
+    .google-mark .green { background: #34a853; }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 12px 0;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.5);
+      font-weight: 500;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(123,193,66,0.18);
+    }
+
+    .email-btn {
+      margin-top: 2px;
+      padding: 11px 16px;
+      background: var(--gold);
+      color: var(--green-dark);
+      box-shadow: 0 8px 24px rgba(240,192,64,0.18);
+    }
+
+    .fineprint {
+      margin-top: 10px;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.62);
+      line-height: 1.25;
+      text-align: center;
+    }
+
+    .fineprint a {
+      color: var(--gold-light);
+      text-decoration: none;
+    }
+
+    .fineprint a:hover { text-decoration: underline; }
+
+    .links {
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .links a {
+      flex: 1 1 130px;
+      text-align: center;
+      color: var(--white);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: rgba(123,193,66,0.16);
+      border: 1px solid rgba(123,193,66,0.18);
+    }
+
+    .links a:hover {
+      background: rgba(123,193,66,0.24);
+    }
+
+    .links .home-link {
+      flex-basis: 100%;
+    }
+
+    .right {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 0;
+    }
+
+    .visual-stack {
+      width: min(100%, 520px);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      position: relative;
+    }
+
+    .quote-card,
+    .art-card {
+      border-radius: 24px;
+      box-shadow: 0 18px 38px rgba(0,0,0,0.16);
+      overflow: hidden;
+    }
+
+    .quote-card {
+      align-self: flex-end;
+      max-width: 280px;
+      padding: 16px 18px;
+      background: rgba(255,255,255,0.95);
+      color: #5d594a;
+      line-height: 1.4;
+      font-size: 0.94rem;
+    }
+
+    .art-card {
+      position: relative;
+      background: rgba(255,255,255,0.96);
+      border: 1px solid rgba(123,193,66,0.12);
+    }
+
+    .art-card.small {
+      align-self: flex-start;
+      width: 230px;
+      height: 170px;
+      display: grid;
+      place-items: center;
+    }
+
+    .pixel-crop {
+      width: 88px;
+      height: 88px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      transform: scale(1.05);
+    }
+
+    .pixel-crop span { background: #ec5d2d; border-radius: 2px; }
+    .pixel-crop span:nth-child(1),
+    .pixel-crop span:nth-child(4),
+    .pixel-crop span:nth-child(13),
+    .pixel-crop span:nth-child(16) { background: transparent; }
+    .pixel-crop span:nth-child(2),
+    .pixel-crop span:nth-child(3) { background: #301a14; }
+
+    .art-card.field {
+      width: 100%;
+      height: 260px;
+      background: linear-gradient(180deg, #9bcce8 0 64%, #6f9fef 64% 78%, #dcbc66 78% 100%);
+    }
+
+    .art-card.field::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, transparent 0 6%, rgba(255,255,255,0.82) 6% 8%, transparent 8% 18%, rgba(255,255,255,0.82) 18% 22%, transparent 22% 100%);
+      opacity: 0.88;
+    }
+
+    .hud {
+      position: absolute;
+      top: 12px;
+      left: 14px;
+      z-index: 2;
+      color: white;
+      font-family: 'Playfair Display', serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.03em;
+      text-shadow: 0 1px 0 rgba(0,0,0,0.3);
+    }
+
+    .cloud {
+      position: absolute;
+      background: rgba(255,255,255,0.95);
+      border-radius: 999px;
+      filter: drop-shadow(0 6px 8px rgba(45, 40, 22, 0.06));
+      z-index: 2;
+    }
+
+    .cloud.one {
+      width: 42px;
+      height: 14px;
+      top: 60px;
+      left: 20px;
+    }
+
+    .cloud.one::before,
+    .cloud.one::after {
+      content: '';
+      position: absolute;
+      background: inherit;
+      border-radius: inherit;
+    }
+
+    .cloud.one::before { width: 18px; height: 18px; top: -7px; left: 6px; }
+    .cloud.one::after { width: 16px; height: 16px; top: -4px; right: 4px; }
+
+    .cloud.two {
+      width: 38px;
+      height: 12px;
+      top: 108px;
+      right: 40px;
+    }
+
+    .cropline {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 24px;
+      height: 14px;
+      background: rgba(126, 75, 42, 0.32);
+      z-index: 1;
+    }
+
+    .little-crop,
+    .little-crop::before,
+    .little-crop::after {
+      position: absolute;
+      bottom: 32px;
+      width: 24px;
+      height: 28px;
+      background: #ec6a43;
+      border-radius: 6px 6px 2px 2px;
+      z-index: 2;
+    }
+
+    .little-crop::before,
+    .little-crop::after {
+      content: '';
+      bottom: 0;
+      width: 7px;
+      height: 16px;
+      border-radius: 2px;
+      background: #ec6a43;
+    }
+
+    .little-crop::before { left: 4px; }
+    .little-crop::after { right: 4px; }
+    .little-crop.one { left: 42px; transform: rotate(6deg); }
+    .little-crop.two { left: 126px; background: #f0bf7e; transform: rotate(-1deg); }
+    .little-crop.three { right: 34px; background: #e4d0a0; transform: rotate(1deg); }
+
+    .quote-secondary {
+      align-self: flex-end;
+      max-width: 300px;
+      margin-top: -6px;
+      padding: 15px 18px;
+      background: rgba(255,255,255,0.95);
+      border-radius: 22px;
+      color: #5d594a;
+      line-height: 1.38;
+      font-size: 0.94rem;
+    }
+
+    @media (max-width: 1080px) {
+      body { overflow: auto; }
+      #hero { min-height: 100vh; height: auto; padding: 26px 18px 22px; }
+      .hero-inner { grid-template-columns: 1fr; gap: 20px; }
+      .hero-content { align-items: flex-start; }
+      .card-shell { max-width: none; width: 100%; }
+      .right { min-height: 420px; }
+      .visual-stack { width: min(100%, 520px); }
+    }
+
+    @media (max-width: 720px) {
+      body { overflow: auto; }
+      #hero { padding: 22px 14px 18px; }
+      .hero-title { font-size: clamp(2.15rem, 10vw, 3rem); }
+      .hero-subtitle { max-width: none; }
+      .links a { flex-basis: 100%; }
+      .right { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <section id="hero">
+    <div class="dot-grid"></div>
+    <div class="hero-inner">
+      <div class="hero-content">
+        <a href="/" class="hero-logo"><span class="leaf">🌿</span> AgroMind</a>
+        <div class="hero-badge"><span class="badge-dot"></span> AI agricultural intelligence</div>
+        <h1 class="hero-title">Start using <span class="accent">AgroMind</span></h1>
+        <p class="hero-subtitle">Your AI companion for crop, soil, and pest management.</p>
+
+        <div class="card-shell">
+          <form class="auth-card" method="post" action="/login">
+            <h2>Sign in</h2>
+            <p class="sub">Use Google or your email to access your saved chats.</p>
+
+            {% if error %}
+              <div class="error">{{ error }}</div>
+            {% endif %}
+
+            <a class="google-btn" href="/login/google" role="button">
+              <span class="google-mark" aria-hidden="true"><span class="blue"></span><span class="red"></span><span class="yellow"></span><span class="green"></span></span>
+              Continue with Google
+            </a>
+
+            <div class="divider">OR</div>
+
+            <div class="field{% if error %} error-field{% endif %}">
+              <label for="email">Email Address</label>
+              <input id="email" name="email" type="email" placeholder="name@yourcompany.com" required />
+              <div class="field-hint">If this email is new, we will create your account automatically.</div>
+            </div>
+
+            <button class="email-btn" type="submit">Continue with email</button>
+
+            <div class="fineprint">
+              Agromind is designed by <a href="https://www.prianandhini.tech">Pria Nandhini M A</a>.
+            </div>
+
+            <div class="links">
+              <a class="home-link" href="/">Back to home</a>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="right" aria-hidden="true">
+        <div class="visual-stack">
+          <div class="quote-card">"AgroMind keeps the workflow simple and calm."</div>
+
+          <div class="art-card small">
+            <div class="pixel-crop" aria-hidden="true">
+              <span></span><span></span><span></span><span></span>
+              <span></span><span></span><span></span><span></span>
+              <span></span><span></span><span></span><span></span>
+              <span></span><span></span><span></span><span></span>
+            </div>
+          </div>
+
+          <div class="art-card field">
+            <div class="hud">SCORE: 4<br/>AGROMIND FIELD ARCADE</div>
+            <div class="cloud one"></div>
+            <div class="cloud two"></div>
+            <div class="little-crop one"></div>
+            <div class="little-crop two"></div>
+            <div class="little-crop three"></div>
+            <div class="cropline"></div>
+          </div>
+
+          <div class="quote-secondary">"A clean layout for chat and crop support."</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>

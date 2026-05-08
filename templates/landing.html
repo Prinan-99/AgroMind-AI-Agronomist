@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AgroMind — AI Agricultural Intelligence</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --green-dark: #1a3a0f;
+      --green-mid: #2d5a1b;
+      --green-bright: #4a8c2a;
+      --green-accent: #7bc142;
+      --gold: #f0c040;
+      --gold-light: #fde68a;
+      --cream: #faf7f0;
+      --dark: #0e1f08;
+      --text-muted: #6b7c5e;
+      --white: #ffffff;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 6vw;
+      background: rgba(26,58,15,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(123,193,66,0.15);
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--white);
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .nav-logo .leaf { font-size: 1.6rem; }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-links a {
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-cta {
+      background: var(--gold) !important;
+      color: var(--green-dark) !important;
+      padding: 9px 22px !important;
+      border-radius: 100px !important;
+      font-weight: 500 !important;
+      transition: transform 0.2s, box-shadow 0.2s !important;
+    }
+    .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(240,192,64,0.35) !important; }
+
+    /* ─── HERO ─── */
+    #hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 120px 6vw 80px;
+      position: relative;
+      background: linear-gradient(135deg, var(--green-dark) 0%, #0e2a06 60%, #1a3a0f 100%);
+      overflow: hidden;
+    }
+
+    /* Organic blob background */
+    #hero::before {
+      content: '';
+      position: absolute; top: -20%; right: -10%;
+      width: 700px; height: 700px;
+      background: radial-gradient(ellipse, rgba(74,140,42,0.25) 0%, transparent 70%);
+      border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
+      animation: blobFloat 8s ease-in-out infinite;
+    }
+    #hero::after {
+      content: '';
+      position: absolute; bottom: -10%; left: 5%;
+      width: 500px; height: 500px;
+      background: radial-gradient(ellipse, rgba(240,192,64,0.08) 0%, transparent 70%);
+      border-radius: 40% 60% 45% 55% / 60% 40% 60% 40%;
+      animation: blobFloat 10s ease-in-out infinite reverse;
+    }
+    @keyframes blobFloat {
+      0%,100% { transform: translate(0,0) rotate(0deg); }
+      33% { transform: translate(20px,-15px) rotate(5deg); }
+      66% { transform: translate(-10px,20px) rotate(-3deg); }
+    }
+
+    /* Dot grid overlay */
+    .dot-grid {
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle, rgba(123,193,66,0.12) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative; z-index: 2;
+      max-width: 1200px; width: 100%;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(123,193,66,0.15);
+      border: 1px solid rgba(123,193,66,0.3);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 0.78rem;
+      color: var(--green-accent);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 500;
+      margin-bottom: 24px;
+      animation: fadeUp 0.8s ease both;
+    }
+    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green-accent); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.3)} }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 5vw, 4.2rem);
+      font-weight: 900;
+      line-height: 1.1;
+      color: var(--white);
+      margin-bottom: 24px;
+      animation: fadeUp 0.8s ease 0.1s both;
+    }
+    .hero-title .accent { color: var(--gold); display: block; }
+
+    .hero-subtitle {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.75;
+      max-width: 480px;
+      margin-bottom: 40px;
+      font-weight: 300;
+      animation: fadeUp 0.8s ease 0.2s both;
+    }
+
+    .hero-actions {
+      display: flex; gap: 16px; flex-wrap: wrap;
+      animation: fadeUp 0.8s ease 0.3s both;
+    }
+    .btn-primary {
+      background: var(--gold);
+      color: var(--green-dark);
+      padding: 14px 32px;
+      border-radius: 100px;
+      font-weight: 500;
+      font-size: 0.95rem;
+      text-decoration: none;
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(240,192,64,0.3);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(240,192,64,0.45); }
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.25);
+      color: var(--white);
+      padding: 14px 32px;
+      border-radius: 100px;
+      font-size: 0.95rem;
+      font-weight: 400;
+      text-decoration: none;
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-secondary:hover { border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.05); }
+
+    /* Hero visual — mock chat window */
+    .hero-visual {
+      
+      animation: fadeUp 0.8s ease 0.4s both;
+      position: relative;
+      justify-self: end;
+      transform: translateX(28px);
+    }
+    .mock-window {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(123,193,66,0.2);
+      border-radius: 20px;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+    .mock-header {
+      background: rgba(45,90,27,0.6);
+      padding: 14px 18px;
+      display: flex; align-items: center; gap: 10px;
+      border-bottom: 1px solid rgba(123,193,66,0.15);
+    }
+    .mock-dots span {
+      display: inline-block; width: 10px; height: 10px;
+      border-radius: 50%; margin-right: 5px;
+    }
+    .mock-dots span:nth-child(1) { background: #ff5f57; }
+    .mock-dots span:nth-child(2) { background: #febc2e; }
+    .mock-dots span:nth-child(3) { background: #28c840; }
+    .mock-title { color: rgba(255,255,255,0.7); font-size: 0.82rem; margin-left: 4px; }
+
+    .mock-body { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+
+    .chat-msg { display: flex; gap: 10px; animation: fadeUp 1s ease both; }
+    .chat-msg.user { flex-direction: row-reverse; animation-delay: 0.5s; }
+    .chat-msg.bot { animation-delay: 0.9s; }
+    .avatar {
+      width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; font-weight: 500;
+    }
+    .avatar.bot { background: var(--green-bright); color: #fff; }
+    .avatar.user { background: rgba(240,192,64,0.2); color: var(--gold); border: 1px solid rgba(240,192,64,0.3); }
+    .chat-bubble {
+      padding: 10px 14px; border-radius: 14px;
+      font-size: 0.83rem; line-height: 1.55; max-width: 80%;
+    }
+    .chat-msg.bot .chat-bubble {
+      background: rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.85);
+      border: 1px solid rgba(123,193,66,0.15);
+      border-top-left-radius: 4px;
+    }
+    .chat-msg.user .chat-bubble {
+      background: var(--gold);
+      color: var(--green-dark);
+      border-top-right-radius: 4px;
+    }
+    .chip-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+    .chip {
+      background: rgba(123,193,66,0.15);
+      border: 1px solid rgba(123,193,66,0.3);
+      color: var(--green-accent);
+      padding: 4px 12px; border-radius: 100px;
+      font-size: 0.73rem; font-weight: 500;
+    }
+
+    .mock-input-row {
+      display: flex; gap: 10px; align-items: center;
+      padding: 14px 20px;
+      border-top: 1px solid rgba(123,193,66,0.1);
+    }
+    .mock-input {
+      flex: 1; background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(123,193,66,0.2);
+      border-radius: 100px; padding: 9px 16px;
+      color: rgba(255,255,255,0.5); font-size: 0.82rem;
+      font-family: 'DM Sans', sans-serif;
+      outline: none;
+    }
+    .mock-send {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--gold); border: none; cursor: default;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── STATS STRIP ─── */
+    .stats-strip {
+      background: var(--white);
+      border-top: 1px solid #e8f0e0;
+      border-bottom: 1px solid #e8f0e0;
+      padding: 32px 6vw;
+      display: flex; justify-content: center;
+      gap: 64px; flex-wrap: wrap;
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem; font-weight: 700;
+      color: var(--green-mid);
+      line-height: 1;
+    }
+    .stat-label { font-size: 0.82rem; color: var(--text-muted); margin-top: 4px; font-weight: 400; }
+
+    /* ─── FEATURES ─── */
+    #features {
+      padding: 100px 6vw;
+      background: var(--cream);
+    }
+    .section-tag {
+      font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--green-bright); font-weight: 500; margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      color: var(--green-dark);
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+    .section-sub {
+      font-size: 1rem; color: var(--text-muted);
+      max-width: 520px; line-height: 1.7; font-weight: 300;
+    }
+    .section-head { margin-bottom: 60px; }
+
+    .features-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .feature-card {
+      background: var(--white);
+      border: 1px solid #e2edd8;
+      border-radius: 20px;
+      padding: 32px 28px;
+      transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+      position: relative; overflow: hidden;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--green-accent), var(--gold));
+      opacity: 0; transition: opacity 0.25s;
+    }
+    .feature-card:hover { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(45,90,27,0.1); border-color: #c5dba8; }
+    .feature-card:hover::before { opacity: 1; }
+
+    .feature-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      background: linear-gradient(135deg, #e8f5d8, #d0eaaa);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; margin-bottom: 20px;
+    }
+    .feature-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem; font-weight: 700;
+      color: var(--green-dark); margin-bottom: 10px;
+    }
+    .feature-desc {
+      font-size: 0.88rem; color: var(--text-muted);
+      line-height: 1.7; font-weight: 300;
+    }
+    .feature-tag {
+      display: inline-block; margin-top: 16px;
+      background: #edf7e0; color: var(--green-bright);
+      padding: 4px 12px; border-radius: 100px;
+      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.04em;
+    }
+
+    /* ─── HOW IT WORKS ─── */
+    #how {
+      padding: 100px 6vw;
+      background: var(--green-dark);
+      position: relative; overflow: hidden;
+    }
+    #how::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle, rgba(123,193,66,0.06) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+    #how .section-title { color: var(--white); }
+    #how .section-tag { color: var(--green-accent); }
+    #how .section-sub { color: rgba(255,255,255,0.5); }
+
+    .steps-grid {
+      position: relative; z-index: 2;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0;
+    }
+    .step {
+      padding: 40px 32px;
+      border-right: 1px solid rgba(123,193,66,0.12);
+      position: relative;
+    }
+    .step:last-child { border-right: none; }
+    .step-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.5rem; font-weight: 900;
+      color: rgba(123,193,66,0.15); line-height: 1;
+      margin-bottom: 16px; display: block;
+    }
+    .step-title {
+      font-size: 1rem; font-weight: 500;
+      color: var(--white); margin-bottom: 10px;
+    }
+    .step-desc { font-size: 0.85rem; color: rgba(255,255,255,0.45); line-height: 1.7; font-weight: 300; }
+    .step-icon { font-size: 1.8rem; margin-bottom: 14px; }
+
+    /* ─── TECH STACK ─── */
+    #tech {
+      padding: 80px 6vw;
+      background: var(--white);
+    }
+    .tech-grid {
+      display: flex; flex-wrap: wrap; gap: 16px; margin-top: 48px;
+    }
+    .tech-pill {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--cream); border: 1px solid #e2edd8;
+      border-radius: 100px; padding: 10px 20px;
+      font-size: 0.88rem; font-weight: 500; color: var(--green-dark);
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+    }
+    .tech-pill:hover { border-color: var(--green-accent); background: #f0f9e4; }
+    .tech-pill .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+    }
+    .tech-pill[data-tooltip]:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 10px);
+      transform: translateX(-50%);
+      background: var(--green-dark);
+      color: var(--white);
+      border: 1px solid rgba(123,193,66,0.35);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 0.75rem;
+      font-weight: 400;
+      white-space: nowrap;
+      box-shadow: 0 8px 24px rgba(14,31,8,0.25);
+      z-index: 20;
+      pointer-events: none;
+    }
+    .tech-pill[data-tooltip]:hover::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 4px);
+      transform: translateX(-50%);
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 6px solid var(--green-dark);
+      z-index: 20;
+      pointer-events: none;
+    }
+    .dot-blue { background: #3b82f6; }
+    .dot-green { background: #22c55e; }
+    .dot-yellow { background: #eab308; }
+    .dot-orange { background: #f97316; }
+    .dot-red { background: #ef4444; }
+    .dot-purple { background: #a855f7; }
+    .dot-teal { background: #14b8a6; }
+    .dot-pink { background: #ec4899; }
+
+    /* ─── CTA ─── */
+    #cta {
+      padding: 120px 6vw;
+      background: linear-gradient(135deg, #1a3a0f, #0e2a06);
+      text-align: center; position: relative; overflow: hidden;
+    }
+    #cta::before {
+      content: '';
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+      width: 600px; height: 600px;
+      background: radial-gradient(ellipse, rgba(240,192,64,0.08) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .cta-inner { position: relative; z-index: 2; max-width: 680px; margin: 0 auto; }
+    .cta-eyebrow {
+      font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--gold); font-weight: 500; margin-bottom: 20px;
+    }
+    .cta-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 900; color: var(--white);
+      line-height: 1.15; margin-bottom: 20px;
+    }
+    .cta-sub {
+      color: rgba(255,255,255,0.5); font-size: 1rem;
+      line-height: 1.75; margin-bottom: 40px; font-weight: 300;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--dark);
+      padding: 32px 6vw;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 16px;
+    }
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem; font-weight: 700; color: var(--white);
+    }
+    .footer-copy { font-size: 0.8rem; color: rgba(255,255,255,0.35); }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { font-size: 0.82rem; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--gold); }
+
+    /* ─── SCROLL REVEAL ─── */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+      .hero-visual { display: none; }
+      .nav-links { display: none; }
+      .steps-grid { grid-template-columns: 1fr; }
+      .step { border-right: none; border-bottom: 1px solid rgba(123,193,66,0.12); }
+      .stats-strip { gap: 32px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <span class="leaf">🌿</span> AgroMind
+  </a>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#how">How It Works</a>
+    <a href="#tech">Tech Stack</a>
+    <a href="/chat" class="nav-cta">Launch App →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="dot-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        RAG-Powered · Vision AI · Live
+      </div>
+      <h1 class="hero-title">
+        Your Farm's<br/>
+        <span class="accent">AI Agronomist</span>
+        On Demand
+      </h1>
+      <p class="hero-subtitle">
+        AgroMind combines Retrieval-Augmented Generation with computer vision to diagnose crop diseases, recommend treatments, and guide smarter farming decisions — instantly.
+      </p>
+      <div class="hero-actions">
+        <a href="/chat" class="btn-primary">Try AgroMind Free →</a>
+        <a href="#how" class="btn-secondary">See How It Works</a>
+      </div>
+    </div>
+
+    <!-- MOCK CHAT WINDOW -->
+    <div class="hero-visual">
+      <div class="mock-window">
+        <div class="mock-header">
+          <div class="mock-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <span class="mock-title">AgroMind — Agricultural AI</span>
+        </div>
+        <div class="mock-body">
+          <div class="chat-msg user" style="animation-delay:0.6s">
+            <div class="avatar user">You</div>
+            <div class="chat-bubble">My tomato leaves have spots. What's wrong? 📷</div>
+          </div>
+          <div class="chat-msg bot" style="animation-delay:1.1s">
+            <div class="avatar bot">🌿</div>
+            <div class="chat-bubble">
+              Detected: <strong>Tomato Mosaic Virus (TMV)</strong><br/>
+              Confidence: 91% · Severity: Moderate
+              <div class="chip-row">
+                <span class="chip">Remove infected plants</span>
+                <span class="chip">Trisodium phosphate soak</span>
+              </div>
+            </div>
+          </div>
+          <div class="chat-msg user" style="animation-delay:1.6s">
+            <div class="avatar user">You</div>
+            <div class="chat-bubble">What fertilizer should I use after treatment?</div>
+          </div>
+          <div class="chat-msg bot" style="animation-delay:2.1s">
+            <div class="avatar bot">🌿</div>
+            <div class="chat-bubble">
+              Post-TMV recovery: Use NPK 19:19:19 at half dose with potassium boost to strengthen cell walls and resist reinfection.
+            </div>
+          </div>
+        </div>
+        <div class="mock-input-row">
+          <input class="mock-input" placeholder="Ask about your crops or upload a photo..." disabled />
+          <div class="mock-send">→</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="stat-item reveal">
+    <div class="stat-num">40+</div>
+    <div class="stat-label">Crop Diseases Covered</div>
+  </div>
+  <div class="stat-item reveal" style="transition-delay:0.1s">
+    <div class="stat-num">91%</div>
+    <div class="stat-label">Detection Accuracy</div>
+  </div>
+  <div class="stat-item reveal" style="transition-delay:0.2s">
+    <div class="stat-num">&lt;2s</div>
+    <div class="stat-label">Response Time</div>
+  </div>
+  <div class="stat-item reveal" style="transition-delay:0.3s">
+    <div class="stat-num">RAG</div>
+    <div class="stat-label">Knowledge-Grounded AI</div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="section-head reveal">
+    <p class="section-tag">Core Capabilities</p>
+    <h2 class="section-title">Built for the field.<br/>Powered by intelligence.</h2>
+    <p class="section-sub">Every feature is purpose-built for real agricultural challenges — not generic AI wrapped in green.</p>
+  </div>
+
+  <div class="features-grid">
+    <div class="feature-card reveal" style="transition-delay:0.1s">
+      <div class="feature-title">RAG Knowledge Engine</div>
+      <p class="feature-desc">Answers are grounded in a curated agricultural knowledge base — not hallucinated. Every recommendation is retrieved and verified.</p>
+      <span class="feature-tag">Retrieval-Augmented Generation</span>
+    </div>
+
+    <div class="feature-card reveal" style="transition-delay:0.2s">
+      <div class="feature-title">Treatment Protocols</div>
+      <p class="feature-desc">Get specific, actionable treatment plans including chemical, biological, and cultural control methods tailored to severity.</p>
+      <span class="feature-tag">Evidence-Based</span>
+    </div>
+
+    <div class="feature-card reveal" style="transition-delay:0.3s">
+      <div class="feature-title">Soil & Fertilizer Advice</div>
+      <p class="feature-desc">Ask anything about NPK ratios, soil pH, micronutrients, and irrigation schedules. Get precise recommendations in seconds.</p>
+      <span class="feature-tag">Soil Science</span>
+    </div>
+
+    <div class="feature-card reveal" style="transition-delay:0.4s">
+      <div class="feature-title">Pest Management</div>
+      <p class="feature-desc">Identify pests from descriptions or images. Get integrated pest management strategies including organic and conventional options.</p>
+      <span class="feature-tag">IPM Support</span>
+    </div>
+
+    <div class="feature-card reveal" style="transition-delay:0.5s">
+      <div class="feature-title">Conversational Follow-up</div>
+      <p class="feature-desc">Ask follow-up questions naturally. AgroMind maintains conversation context to give coherent, progressive guidance.</p>
+      <span class="feature-tag">Multi-turn Chat</span>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div style="position:relative;z-index:2;max-width:1200px;margin:0 auto;">
+    <div class="section-head reveal">
+      <p class="section-tag">Architecture</p>
+      <h2 class="section-title">From question to insight<br/>in milliseconds.</h2>
+      <p class="section-sub">A modern AI pipeline that combines semantic search with large language models — grounded in agricultural expertise.</p>
+    </div>
+    <div class="steps-grid reveal">
+      <div class="step">
+        <span class="step-num">01</span>
+        <div class="step-title">Input</div>
+        <p class="step-desc">Farmer asks a question or uploads a crop photo via the chat interface.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">02</span>
+        <div class="step-title">Retrieval</div>
+        <p class="step-desc">Query is embedded and semantically matched against the agricultural knowledge base using vector search.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">03</span>
+        <div class="step-title">Generation</div>
+        <p class="step-desc">Retrieved context is passed to an LLM which generates a grounded, accurate response.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">04</span>
+        <div class="step-title">Delivery</div>
+        <p class="step-desc">Farmer receives actionable, expert-level advice with treatment steps and follow-up support.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section id="tech">
+  <div class="section-head reveal">
+    <p class="section-tag">Under The Hood</p>
+    <h2 class="section-title">Built with production-grade tools.</h2>
+    <p class="section-sub">A carefully chosen stack that balances performance, cost-efficiency, and developer velocity. Hover and see the models used.</p>
+  </div>
+  <div class="tech-grid reveal">
+    <div class="tech-pill"><span class="dot dot-blue"></span> Python / Flask</div>
+    <div class="tech-pill" data-tooltip="Models: llama3.2 (Ollama), all-mpnet-base-v2 (Embeddings)"><span class="dot dot-green"></span> LangChain</div>
+    <div class="tech-pill"><span class="dot dot-orange"></span> ChromaDB Vector Store</div>
+    <div class="tech-pill" data-tooltip="Sentence-Transformers: all-mpnet-base-v2"><span class="dot dot-purple"></span> HuggingFace Embeddings</div>
+    <div class="tech-pill" data-tooltip="Upcoming features: OPENCV Image processing and detecting issues"><span class="dot dot-red"></span> OpenCV / PIL</div>
+    <div class="tech-pill"><span class="dot dot-teal"></span> RAG Pipeline</div>
+    <div class="tech-pill"><span class="dot dot-blue"></span> REST API</div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="cta-inner">
+    <p class="cta-eyebrow reveal">Ready to diagnose your crops?</p>
+    <h2 class="cta-title reveal">Smarter farming starts with a single question.</h2>
+    <p class="cta-sub reveal">No sign-up required. Just open the chat, upload your crop photo or type your question, and get expert-level agricultural guidance instantly.</p>
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;" class="reveal">
+      <a href="/chat" class="btn-primary">Open AgroMind →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">🌿 AgroMind</div>
+  <div class="footer-links">
+    <a href="#features">Features</a>
+    <a href="#how">Architecture</a>
+    <a href="#tech">Stack</a>
+    <a href="/chat">Launch App</a>
+  </div>
+  <div class="footer-copy">Built with Python · Flask · LangChain · Gemini AI</div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  reveals.forEach(r => io.observe(r));
+
+  // Animated stat counters
+  function animateCounter(el, target, suffix='') {
+    let start = 0;
+    const isFloat = target % 1 !== 0;
+    const step = target / 60;
+    const timer = setInterval(() => {
+      start += step;
+      if (start >= target) { start = target; clearInterval(timer); }
+      el.textContent = isFloat ? start.toFixed(0) + suffix : Math.floor(start) + suffix;
+    }, 16);
+  }
+
+  const statNums = document.querySelectorAll('.stat-num');
+  const statsIO = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const el = e.target;
+        const text = el.textContent;
+        if (text === '40+') animateCounter(el, 40, '+');
+        if (text === '91%') animateCounter(el, 91, '%');
+        statsIO.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+  statNums.forEach(n => statsIO.observe(n));
+</script>
+</body>
+</html>

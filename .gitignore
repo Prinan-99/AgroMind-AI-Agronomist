@@ -1,0 +1,49 @@
+# Virtual Environment
+source/
+venv/
+env/
+.venv/
+
+# Environment variables (contains API keys)
+.env
+.env.local
+.env.*.local
+
+# Vector store (can regenerate from data/)
+chroma_db/
+*.db
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Frontend (if you add React/Next.js)
+node_modules/
+dist/
+.next/
+out/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Temporary files
+*.tmp
+.cache/
+
+# Data files (optional - include small PDFs, exclude large ones)
+# data/agri/  ← Keep this if < 50MB
