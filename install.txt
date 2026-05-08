@@ -1,6 +1,6 @@
-pip install langchain_ollama
-pip install sentence_transformers
-pip install pdfplumber
-pip install chromadb
-pip install flask --break-system-packages
-pip install Authlib
+flask
+Authlib
+langchain_ollama
+sentence_transformers
+pdfplumber
+chromadb
