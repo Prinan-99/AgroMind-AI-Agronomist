@@ -77,6 +77,15 @@
             z-index: 110;
         }
 
+        .sidebar-backdrop {
+            position: fixed;
+            inset: 0;
+            display: none;
+            background: rgba(4,18,4,0.48);
+            backdrop-filter: blur(2px);
+            z-index: 105;
+        }
+
         .sidebar-header {
             padding: 24px 20px;
             display: flex;
@@ -503,6 +512,21 @@
             gap: 16px;
         }
 
+        .mobile-sidebar-toggle {
+            display: none;
+            width: 38px;
+            height: 38px;
+            border: 1px solid var(--border-light);
+            border-radius: 10px;
+            background: rgba(255,255,255,0.72);
+            color: var(--green-dark);
+            font: inherit;
+            font-size: 1.25rem;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+        }
+
         .btn-ghost {
             color: var(--text-muted);
             text-decoration: none;
@@ -814,9 +838,76 @@
 
         /* ─── RESPONSIVE ─── */
         @media (max-width: 900px) {
-            aside#left-sidebar { width: 0; overflow: hidden; position: absolute; }
-            #chat-container { padding: 40px 16px 140px; }
-            nav { padding: 0 20px; }
+            body { overflow: hidden; }
+            aside#left-sidebar {
+                position: fixed;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                width: min(82vw, 310px);
+                transform: translateX(-100%);
+                box-shadow: 18px 0 48px rgba(0,0,0,0.24);
+                z-index: 120;
+            }
+            body.sidebar-open aside#left-sidebar { transform: translateX(0); }
+            body.sidebar-open .sidebar-backdrop { display: block; }
+            .mobile-sidebar-toggle { display: inline-flex; }
+            nav { padding: 0 14px; height: 58px; }
+            .nav-title { font-size: 0.82rem; }
+            .nav-actions { gap: 8px; }
+            .btn-ghost { padding: 8px 10px; }
+            #chat-container {
+                padding: 32px 14px 136px;
+                gap: 22px;
+            }
+            .welcome-box { padding: 24px 0 10px; }
+            .welcome-icon { font-size: 2.6rem; margin-bottom: 14px; }
+            .welcome-title { font-size: 1.7rem; }
+            .welcome-subtitle { font-size: 0.95rem; }
+            .message { gap: 10px; }
+            .m-avatar { width: 28px; height: 28px; font-size: 0.95rem; }
+            .m-content { max-width: calc(100% - 38px); }
+            .bubble { padding: 12px 14px; font-size: 0.92rem; border-radius: 16px; }
+            .message img { max-width: min(260px, 100%); }
+            #input-container {
+                bottom: 14px;
+                padding: 0 12px;
+            }
+            .input-box-wrapper {
+                border-radius: 20px;
+                padding: 6px 10px;
+            }
+            .input-row { gap: 6px; }
+            #query-input {
+                min-width: 0;
+                font-size: 0.95rem;
+                padding: 11px 2px;
+            }
+            .action-btn { width: 36px; height: 36px; }
+            .profile-menu {
+                left: 12px;
+                right: 12px;
+                bottom: calc(100% + 8px);
+            }
+            .profile-language-submenu,
+            .profile-help-submenu {
+                left: 12px;
+                right: 12px;
+                bottom: auto;
+                top: 86px;
+                min-width: 0;
+            }
+            .profile-help-submenu { top: 138px; }
+            .history-actions-menu {
+                max-width: calc(100vw - 24px);
+            }
+        }
+
+        @media (max-width: 420px) {
+            .nav-title { display: none; }
+            .confirm-box { padding: 18px; }
+            .confirm-actions { flex-direction: column-reverse; }
+            .confirm-btn { width: 100%; }
         }
     </style>
 </head>
@@ -919,6 +1010,7 @@
             {% endif %}
         </div>
     </aside>
+    <div id="sidebar-backdrop" class="sidebar-backdrop"></div>
 
     <div id="confirm-overlay" class="confirm-overlay" aria-hidden="true">
         <div class="confirm-box" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
@@ -934,7 +1026,8 @@
     <!-- MAIN -->
     <main>
         <nav>
-            <div style="font-weight: 500; font-size: 0.9rem; color: var(--text-muted);">
+            <button id="mobile-sidebar-toggle" class="mobile-sidebar-toggle" type="button" aria-label="Open chat menu">☰</button>
+            <div class="nav-title" style="font-weight: 500; font-size: 0.9rem; color: var(--text-muted);">
                 Agricultural Intelligence
             </div>
             <div class="nav-actions">
@@ -991,6 +1084,8 @@
         const imageTray = document.getElementById("image-preview-tray");
         const bottomProfile = document.getElementById("bottom-profile");
         const profileMenu = document.getElementById("profile-menu");
+        const mobileSidebarToggle = document.getElementById("mobile-sidebar-toggle");
+        const sidebarBackdrop = document.getElementById("sidebar-backdrop");
         const confirmOverlay = document.getElementById("confirm-overlay");
         const confirmMessage = document.getElementById("confirm-message");
         const confirmCancel = document.getElementById("confirm-cancel");
@@ -1005,6 +1100,24 @@
         queryInput.addEventListener('input', () => {
             sendBtn.disabled = !queryInput.value.trim();
         });
+
+        function closeMobileSidebar() {
+            document.body.classList.remove('sidebar-open');
+            if (mobileSidebarToggle) mobileSidebarToggle.setAttribute('aria-expanded', 'false');
+        }
+
+        if (mobileSidebarToggle && sidebarBackdrop) {
+            mobileSidebarToggle.setAttribute('aria-expanded', 'false');
+            mobileSidebarToggle.addEventListener('click', () => {
+                const willOpen = !document.body.classList.contains('sidebar-open');
+                document.body.classList.toggle('sidebar-open', willOpen);
+                mobileSidebarToggle.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+            });
+            sidebarBackdrop.addEventListener('click', closeMobileSidebar);
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') closeMobileSidebar();
+            });
+        }
 
         // Profile Menu
         if (bottomProfile && profileMenu) {
@@ -1248,6 +1361,7 @@
             });
             loadHistory();
             loadThreads();
+            closeMobileSidebar();
         }
 
         async function saveThreadTitle(threadId, title) {
@@ -1485,6 +1599,7 @@
                     `;
                     loadThreads();
                     queryInput.focus();
+                    closeMobileSidebar();
                 }
             } catch (err) {
                 console.error(err);

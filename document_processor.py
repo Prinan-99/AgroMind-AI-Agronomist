@@ -5,7 +5,8 @@ from typing import List, Dict
 import pdfplumber
 
 class DocumentProcessor:
-    def __init__(self, data_dir:str="data/agri/"):
+    def __init__(self, data_dir:str=None):
+        data_dir = data_dir or os.getenv("AGROMIND_DATA_DIR", "data/agri/")
         self.data_dir=Path(data_dir)
         self.categories=["crops","irrigation","pest","pest_harvest","soil"]
 

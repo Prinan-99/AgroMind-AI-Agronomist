@@ -555,12 +555,55 @@
 
     /* ─── RESPONSIVE ─── */
     @media (max-width: 768px) {
-      .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+      nav { padding: 14px 18px; }
+      .nav-logo { font-size: 1.22rem; }
+      #hero {
+        min-height: auto;
+        padding: 104px 20px 44px;
+      }
+      .hero-inner { grid-template-columns: 1fr; gap: 34px; }
+      .hero-content { align-items: stretch; text-align: left; }
+      .hero-title { font-size: clamp(2.25rem, 12vw, 3.15rem); }
+      .hero-subtitle { font-size: 1rem; margin-bottom: 28px; }
+      .hero-actions { flex-direction: column; }
+      .btn-primary,
+      .btn-secondary {
+        width: 100%;
+        justify-content: center;
+      }
       .hero-visual { display: none; }
       .nav-links { display: none; }
+      .hero-benefits-wrapper { padding: 30px 20px 34px; }
+      .hero-benefits { grid-template-columns: 1fr; gap: 14px; }
+      #features,
+      #how,
+      #docs,
+      #pricing,
+      #cta {
+        padding: 62px 20px;
+      }
+      .section-head { margin-bottom: 34px; }
+      .features-grid,
+      .docs-grid,
+      .pricing-grid {
+        grid-template-columns: 1fr;
+      }
       .steps-grid { grid-template-columns: 1fr; }
       .step { border-right: none; border-bottom: 1px solid rgba(123,193,66,0.12); }
-      .stats-strip { gap: 32px; }
+      .stats-strip { gap: 26px; padding: 28px 20px; }
+      footer { padding: 28px 20px; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+      .footer-links { flex-wrap: wrap; gap: 16px; }
+    }
+
+    @media (max-width: 420px) {
+      .hero-badge { white-space: normal; border-radius: 14px; }
+      .stat-num { font-size: 2rem; }
+      .feature-card,
+      .pricing-card,
+      .doc-card {
+        padding: 24px 20px;
+      }
     }
   </style>
 </head>

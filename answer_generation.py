@@ -6,16 +6,22 @@ Low latency: uses only top 3 ranked docs
 
 from typing import List, Dict
 from langchain_ollama import OllamaLLM
+import os
 
 
 class AnswerGenerator:
-    def __init__(self, model: str = "llama3.2", top_docs: int = 3):
+    def __init__(self, model: str = None, top_docs: int = 3):
         """
         Args:
             model: Ollama model to use
             top_docs: Number of top ranked docs to use
         """
-        self.llm = OllamaLLM(model=model, temperature=0.3)
+        model = model or os.getenv("OLLAMA_MODEL", "llama3.2")
+        self.llm = OllamaLLM(
+            model=model,
+            temperature=0.3,
+            base_url=os.getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434"),
+        )
         self.top_docs = top_docs
         print(f"✅ LLM loaded: {model} | Using top {top_docs} docs for generation")
 

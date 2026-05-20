@@ -9,9 +9,24 @@
         body { font-family: 'DM Sans', sans-serif; background: #faf7f0; color: #0e1f08; padding: 40px; }
         .card { max-width: 520px; margin: 40px auto; background: #fff; padding: 28px; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.06); }
         label { display:block; margin-bottom:8px; font-weight:600; }
-        input[type=text] { width:100%; padding:12px 14px; border:1px solid #e6e6e6; border-radius:8px; margin-bottom:12px; }
+        input[type=text] { width:100%; padding:12px 14px; border:1px solid #e6e6e6; border-radius:8px; margin-bottom:12px; font: inherit; }
         .btn { background: #2d5a1b; color: #fff; padding:10px 14px; border-radius:8px; border:none; cursor:pointer; }
         .error { color:#b91c1c; margin-bottom:12px; }
+        .profile-tools { margin-top:18px; display:flex; gap:16px; align-items:flex-start; }
+        .thumb-column { display:flex; flex-direction:column; gap:8px; }
+        .profile-actions { flex:1; display:flex; flex-direction:column; gap:8px; }
+        .action-row { display:flex; gap:8px; margin-top:8px; flex-wrap: wrap; }
+        @media (max-width: 640px) {
+            body { padding: 18px; }
+            .card { margin: 12px auto; padding: 20px; }
+            .profile-tools { flex-direction: column; }
+            .thumb-column,
+            .profile-actions,
+            .thumb { width: 100%; }
+            .thumb { height: auto; aspect-ratio: 3 / 2; }
+            .action-row { flex-direction: column; }
+            .btn { width: 100%; }
+        }
     </style>
 </head>
 <body>
@@ -25,9 +40,9 @@
             <label for="username">Username</label>
             <input type="text" id="username" name="username" value="{{ username }}" required minlength="3" />
 
-            <div style="margin-top:18px; display:flex; gap:16px; align-items:flex-start;">
+            <div class="profile-tools">
                 <!-- Image gallery -->
-                <div style="display:flex; flex-direction:column; gap:8px;">
+                <div class="thumb-column">
                     <div class="thumb" data-index="0" title="Profile picture">
                         <img src="https://picsum.photos/seed/p1/240/160" alt="Profile 1" />
                     </div>
@@ -41,10 +56,10 @@
                 </div>
 
                 <!-- Options for selected image -->
-                <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+                <div class="profile-actions">
                     <div style="font-weight:700; color:#2d5a1b;">Selected image actions</div>
                     <div id="selected-info" style="color:#4b5b3d; font-size:0.92rem;">Hover the second image to view details. Click an option below to act.</div>
-                    <div style="display:flex; gap:8px; margin-top:8px;">
+                    <div class="action-row">
                         <button class="btn" type="button" id="download-btn">Download</button>
                         <button class="btn" type="button" id="set-avatar-btn">Set as avatar</button>
                         <button class="btn" type="button" id="remove-btn">Remove</button>
@@ -57,7 +72,7 @@
         </form>
     </div>
     <style>
-        .thumb { width:240px; height:160px; border-radius:10px; overflow:hidden; border:1px solid #e6e6e6; }
+        .thumb { width:min(240px, 100%); height:160px; border-radius:10px; overflow:hidden; border:1px solid #e6e6e6; }
         .thumb img { width:100%; height:100%; object-fit:cover; display:block; }
         .thumb { position:relative; }
         .thumb-overlay {
@@ -67,6 +82,9 @@
         .thumb:hover .thumb-overlay { transform: translateY(0%); }
         .overlay-title { font-weight:700; }
         .overlay-desc { font-size:0.82rem; opacity:0.9; margin-top:4px; }
+        @media (max-width: 640px) {
+            .thumb { width: 100%; height: auto; aspect-ratio: 3 / 2; }
+        }
     </style>
 
     <script>

@@ -1,10 +1,15 @@
 from typing import Tuple
 from langchain_ollama import OllamaLLM
+import os
 
 class QueryTranslator:
     def __init__(self):
         print("QueryTranslator initialized with Step Back technique")
-        self.llm = OllamaLLM(model="llama3.2", temperature=0.3)
+        self.llm = OllamaLLM(
+            model=os.getenv("OLLAMA_MODEL", "llama3.2"),
+            temperature=0.3,
+            base_url=os.getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434"),
+        )
 
     def step_back_translate(self, query: str) -> Tuple[str, str]:
         query_translation_prompt = f"""You are an expert agricultural consultant with decades of experience 

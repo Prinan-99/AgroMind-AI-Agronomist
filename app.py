@@ -104,7 +104,7 @@ if GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET:
         client_kwargs={"scope": "openid email profile"},
     )
 
-DB_PATH = "agromind.db"
+DB_PATH = os.getenv("AGROMIND_DB_PATH", "agromind.db")
 
 
 def get_db_connection():

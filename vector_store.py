@@ -6,11 +6,13 @@ ChromaDB management for AgroMind RAG
 import chromadb
 from chromadb.utils import embedding_functions
 from typing import List, Dict
+import os
 
 
 class VectorStore:
-    def __init__(self, persist_dir: str = "./chroma_db"):
+    def __init__(self, persist_dir: str = None):
         """Initialize ChromaDB with local persistence"""
+        persist_dir = persist_dir or os.getenv("CHROMA_DB_DIR", "./chroma_db")
         self.client = chromadb.PersistentClient(path=persist_dir)
         self.embedding_fn = embedding_functions.SentenceTransformerEmbeddingFunction(
             model_name="all-mpnet-base-v2"

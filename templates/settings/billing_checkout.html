@@ -265,11 +265,32 @@
             flex: 0 0 auto;
         }
         @media (max-width: 900px) {
+            .page { padding: 22px 16px 36px; }
+            .hero,
+            .summary,
+            .plan-card,
+            .checkout-panel,
+            .side-panel,
+            .step-card {
+                border-radius: 16px;
+                padding: 16px;
+            }
+            .brand { font-size: 1.25rem; }
+            h1 { font-size: 2rem; }
             .plan-grid { grid-template-columns: 1fr; }
             .topbar, .summary { flex-direction: column; align-items: flex-start; }
             .checkout-head { flex-direction: column; }
             .checkout-steps,
             .billing-grid { grid-template-columns: 1fr; }
+            .button-row {
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
         }
     </style>
 </head>

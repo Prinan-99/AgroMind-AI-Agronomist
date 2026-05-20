@@ -377,11 +377,31 @@
 
         @media (max-width: 820px) {
             .settings-shell { grid-template-columns: 1fr; }
-            .settings-nav { border-right: 0; border-bottom: 1px solid var(--line); }
-            h1 { margin-bottom: 24px; }
-            .tab-list { flex-direction: row; overflow-x: auto; padding-bottom: 4px; }
-            .tab-button { min-width: max-content; }
+            .settings-nav {
+                position: sticky;
+                top: 0;
+                z-index: 20;
+                padding: 18px 18px 14px;
+                border-right: 0;
+                border-bottom: 1px solid var(--line);
+                background: var(--bg);
+            }
+            .brand-link { margin-bottom: 12px; }
+            h1 { margin-bottom: 18px; font-size: 2rem; }
+            .tab-list {
+                flex-direction: row;
+                overflow-x: auto;
+                padding-bottom: 6px;
+                scrollbar-width: none;
+            }
+            .tab-list::-webkit-scrollbar { display: none; }
+            .tab-button {
+                min-width: max-content;
+                padding: 10px 13px;
+                font-size: 0.96rem;
+            }
             .settings-content { padding: 32px 22px 46px; }
+            .tab-panel { max-width: none; }
             .row {
                 grid-template-columns: 1fr;
                 gap: 12px;
@@ -397,6 +417,38 @@
             .segmented,
             .switch { justify-self: start; }
             .button-row { justify-content: flex-start; }
+        }
+
+        @media (max-width: 520px) {
+            .settings-content { padding: 24px 16px 40px; }
+            .section-title { margin-bottom: 18px; }
+            .billing-summary,
+            .plan-card,
+            .billing-notice,
+            .clerk-pricing-shell {
+                padding: 14px;
+            }
+            .button-row {
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .button-row .btn,
+            .button-row a.btn {
+                width: 100%;
+                justify-content: center;
+                text-align: center;
+            }
+            .segmented {
+                width: 100%;
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .icon-choice { justify-content: center; }
+            input,
+            select,
+            textarea {
+                font-size: 16px;
+            }
         }
     </style>
 </head>

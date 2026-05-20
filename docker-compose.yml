@@ -1,0 +1,40 @@
+services:
+  agromind:
+    build: .
+    image: agromind-rag-chatbot:latest
+    container_name: agromind-rag-chatbot
+    ports:
+      - "5000:5000"
+    environment:
+      PORT: "5000"
+      FLASK_SECRET_KEY: "${FLASK_SECRET_KEY:-change-this-secret}"
+      OLLAMA_MODEL: "${OLLAMA_MODEL:-llama3.2}"
+      OLLAMA_HOST: "0.0.0.0:11434"
+      OLLAMA_BASE_URL: "http://127.0.0.1:11434"
+      CHROMA_DB_DIR: "/app/chroma_db"
+      AGROMIND_DB_PATH: "/app/runtime/agromind.db"
+      AGROMIND_DATA_DIR: "/app/data/agri"
+      RUN_INGEST_ON_START: "${RUN_INGEST_ON_START:-auto}"
+      WEB_CONCURRENCY: "${WEB_CONCURRENCY:-1}"
+      GUNICORN_THREADS: "${GUNICORN_THREADS:-4}"
+      GUNICORN_TIMEOUT: "${GUNICORN_TIMEOUT:-300}"
+      CLERK_PUBLISHABLE_KEY: "${CLERK_PUBLISHABLE_KEY:-}"
+      CLERK_SECRET_KEY: "${CLERK_SECRET_KEY:-}"
+      CLERK_ENABLE_APPLE: "${CLERK_ENABLE_APPLE:-0}"
+      GOOGLE_CLIENT_ID: "${GOOGLE_CLIENT_ID:-}"
+      GOOGLE_CLIENT_SECRET: "${GOOGLE_CLIENT_SECRET:-}"
+    volumes:
+      - ./runtime:/app/runtime
+      - ./chroma_db:/app/chroma_db
+      - ollama_data:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    restart: unless-stopped
+
+volumes:
+  ollama_data:
