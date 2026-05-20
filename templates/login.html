@@ -1,613 +1,712 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AgroMind Login</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
-  <style>
-    :root {
-      --green-dark: #1a3a0f;
-      --green-mid: #2d5a1b;
-      --green-bright: #4a8c2a;
-      --green-accent: #7bc142;
-      --gold: #f0c040;
-      --gold-light: #fde68a;
-      --cream: #faf7f0;
-      --dark: #0e1f08;
-      --text-muted: #6b7c5e;
-      --white: #ffffff;
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html, body { height: 100%; }
-
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--green-dark);
-      color: var(--white);
-      overflow: hidden;
-    }
-
-    #hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      padding: 22px 4.5vw;
-      position: relative;
-      background: linear-gradient(135deg, var(--green-dark) 0%, #0e2a06 60%, #1a3a0f 100%);
-      overflow: hidden;
-    }
-
-    #hero::before {
-      content: '';
-      position: absolute; top: -18%; right: -10%;
-      width: 620px; height: 620px;
-      background: radial-gradient(ellipse, rgba(74,140,42,0.24) 0%, transparent 70%);
-      border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
-    }
-
-    #hero::after {
-      content: '';
-      position: absolute; bottom: -12%; left: 4%;
-      width: 420px; height: 420px;
-      background: radial-gradient(ellipse, rgba(240,192,64,0.08) 0%, transparent 70%);
-      border-radius: 40% 60% 45% 55% / 60% 40% 60% 40%;
-    }
-
-    .dot-grid {
-      position: absolute; inset: 0;
-      background-image: radial-gradient(circle, rgba(123,193,66,0.1) 1px, transparent 1px);
-      background-size: 30px 30px;
-      pointer-events: none;
-      opacity: 0.85;
-    }
-
-    .hero-inner {
-      position: relative;
-      z-index: 2;
-      width: 100%;
-      max-width: 1180px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-      gap: 28px;
-      align-items: center;
-    }
-
-    .hero-content {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      min-width: 0;
-    }
-
-    .hero-logo {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-family: 'Playfair Display', serif;
-      font-size: 1.55rem;
-      font-weight: 700;
-      color: var(--white);
-      text-decoration: none;
-      width: fit-content;
-    }
-
-    .hero-logo .leaf { font-size: 1.55rem; }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      width: fit-content;
-      background: rgba(123,193,66,0.14);
-      border: 1px solid rgba(123,193,66,0.26);
-      border-radius: 999px;
-      padding: 6px 14px;
-      font-size: 0.75rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--green-accent);
-      font-weight: 500;
-    }
-
-    .badge-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--green-accent);
-    }
-
-    .hero-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.6rem, 4.8vw, 4rem);
-      line-height: 1.04;
-      letter-spacing: -0.04em;
-      font-weight: 900;
-      color: var(--white);
-      max-width: 520px;
-    }
-
-    .hero-title .accent { color: var(--gold); display: block; }
-
-    .hero-subtitle {
-      max-width: 430px;
-      color: rgba(255,255,255,0.68);
-      font-size: 0.98rem;
-      line-height: 1.35;
-      margin-top: 4px;
-    }
-
-    .card-shell {
-      margin-top: 8px;
-      border-radius: 28px;
-      padding: 4px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(123,193,66,0.18);
-      box-shadow: 0 18px 42px rgba(0,0,0,0.18);
-      max-width: 470px;
-    }
-
-    .auth-card {
-      border-radius: 24px;
-      padding: 18px;
-      background: rgba(16, 51, 9, 0.88);
-      border: 1px solid rgba(123,193,66,0.2);
-      backdrop-filter: blur(10px);
-    }
-
-    .auth-card h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.45rem;
-      margin-bottom: 6px;
-      color: var(--white);
-    }
-
-    .auth-card .sub {
-      color: rgba(255,255,255,0.72);
-      font-size: 0.92rem;
-      line-height: 1.35;
-      margin-bottom: 12px;
-    }
-
-    .error {
-      background: rgba(239,68,68,0.14);
-      border: 1px solid rgba(239,68,68,0.35);
-      color: #fecaca;
-      border-radius: 12px;
-      padding: 10px 12px;
-      font-size: 0.9rem;
-      margin-bottom: 12px;
-    }
-
-    .field { margin-bottom: 10px; }
-
-    .field.error-field input {
-      border-color: rgba(239,68,68,0.65);
-      box-shadow: 0 0 0 3px rgba(239,68,68,0.10);
-    }
-
-    .field-hint {
-      margin-top: 6px;
-      font-size: 0.78rem;
-      color: rgba(255,255,255,0.62);
-    }
-
-    label {
-      display: block;
-      font-size: 0.78rem;
-      color: rgba(255,255,255,0.84);
-      margin-bottom: 4px;
-      font-weight: 500;
-    }
-
-    input {
-      width: 100%;
-      border: 1px solid rgba(123,193,66,0.22);
-      background: rgba(255,255,255,0.08);
-      color: var(--white);
-      border-radius: 14px;
-      padding: 10px 14px;
-      font-size: 0.92rem;
-      outline: none;
-    }
-
-    input::placeholder { color: rgba(255,255,255,0.45); }
-
-    input:focus {
-      border-color: var(--gold);
-      box-shadow: 0 0 0 3px rgba(240,192,64,0.16);
-    }
-
-    .google-btn,
-    .email-btn {
-      width: 100%;
-      border: none;
-      border-radius: 999px;
-      font-size: 0.95rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
-    }
-
-    .google-btn {
-      background: #ffffff;
-      color: #2e2a1d;
-      border: 1px solid rgba(0,0,0,0.08);
-      box-shadow: 0 10px 22px rgba(0,0,0,0.12);
-      padding: 12px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      text-decoration: none;
-    }
-
-    .google-btn:hover,
-    .email-btn:hover {
-      transform: translateY(-1px);
-    }
-
-    .google-mark {
-      display: inline-grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 2px;
-      width: 16px;
-      height: 16px;
-      flex: none;
-    }
-
-    .google-mark span {
-      display: block;
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-    }
-
-    .google-mark .blue { background: #4285f4; }
-    .google-mark .red { background: #ea4335; }
-    .google-mark .yellow { background: #fbbc05; }
-    .google-mark .green { background: #34a853; }
-
-    .divider {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin: 12px 0;
-      font-size: 0.78rem;
-      letter-spacing: 0.08em;
-      color: rgba(255,255,255,0.5);
-      font-weight: 500;
-    }
-
-    .divider::before,
-    .divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: rgba(123,193,66,0.18);
-    }
-
-    .email-btn {
-      margin-top: 2px;
-      padding: 11px 16px;
-      background: var(--gold);
-      color: var(--green-dark);
-      box-shadow: 0 8px 24px rgba(240,192,64,0.18);
-    }
-
-    .fineprint {
-      margin-top: 10px;
-      font-size: 0.78rem;
-      color: rgba(255,255,255,0.62);
-      line-height: 1.25;
-      text-align: center;
-    }
-
-    .fineprint a {
-      color: var(--gold-light);
-      text-decoration: none;
-    }
-
-    .fineprint a:hover { text-decoration: underline; }
-
-    .links {
-      display: flex;
-      gap: 10px;
-      justify-content: space-between;
-      margin-top: 10px;
-      flex-wrap: wrap;
-    }
-
-    .links a {
-      flex: 1 1 130px;
-      text-align: center;
-      color: var(--white);
-      text-decoration: none;
-      font-size: 0.88rem;
-      font-weight: 700;
-      padding: 9px 12px;
-      border-radius: 999px;
-      background: rgba(123,193,66,0.16);
-      border: 1px solid rgba(123,193,66,0.18);
-    }
-
-    .links a:hover {
-      background: rgba(123,193,66,0.24);
-    }
-
-    .links .home-link {
-      flex-basis: 100%;
-    }
-
-    .right {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 0;
-    }
-
-    .visual-stack {
-      width: min(100%, 520px);
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      position: relative;
-    }
-
-    .quote-card,
-    .art-card {
-      border-radius: 24px;
-      box-shadow: 0 18px 38px rgba(0,0,0,0.16);
-      overflow: hidden;
-    }
-
-    .quote-card {
-      align-self: flex-end;
-      max-width: 280px;
-      padding: 16px 18px;
-      background: rgba(255,255,255,0.95);
-      color: #5d594a;
-      line-height: 1.4;
-      font-size: 0.94rem;
-    }
-
-    .art-card {
-      position: relative;
-      background: rgba(255,255,255,0.96);
-      border: 1px solid rgba(123,193,66,0.12);
-    }
-
-    .art-card.small {
-      align-self: flex-start;
-      width: 230px;
-      height: 170px;
-      display: grid;
-      place-items: center;
-    }
-
-    .pixel-crop {
-      width: 88px;
-      height: 88px;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
-      transform: scale(1.05);
-    }
-
-    .pixel-crop span { background: #ec5d2d; border-radius: 2px; }
-    .pixel-crop span:nth-child(1),
-    .pixel-crop span:nth-child(4),
-    .pixel-crop span:nth-child(13),
-    .pixel-crop span:nth-child(16) { background: transparent; }
-    .pixel-crop span:nth-child(2),
-    .pixel-crop span:nth-child(3) { background: #301a14; }
-
-    .art-card.field {
-      width: 100%;
-      height: 260px;
-      background: linear-gradient(180deg, #9bcce8 0 64%, #6f9fef 64% 78%, #dcbc66 78% 100%);
-    }
-
-    .art-card.field::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(90deg, transparent 0 6%, rgba(255,255,255,0.82) 6% 8%, transparent 8% 18%, rgba(255,255,255,0.82) 18% 22%, transparent 22% 100%);
-      opacity: 0.88;
-    }
-
-    .hud {
-      position: absolute;
-      top: 12px;
-      left: 14px;
-      z-index: 2;
-      color: white;
-      font-family: 'Playfair Display', serif;
-      font-size: 0.78rem;
-      letter-spacing: 0.03em;
-      text-shadow: 0 1px 0 rgba(0,0,0,0.3);
-    }
-
-    .cloud {
-      position: absolute;
-      background: rgba(255,255,255,0.95);
-      border-radius: 999px;
-      filter: drop-shadow(0 6px 8px rgba(45, 40, 22, 0.06));
-      z-index: 2;
-    }
-
-    .cloud.one {
-      width: 42px;
-      height: 14px;
-      top: 60px;
-      left: 20px;
-    }
-
-    .cloud.one::before,
-    .cloud.one::after {
-      content: '';
-      position: absolute;
-      background: inherit;
-      border-radius: inherit;
-    }
-
-    .cloud.one::before { width: 18px; height: 18px; top: -7px; left: 6px; }
-    .cloud.one::after { width: 16px; height: 16px; top: -4px; right: 4px; }
-
-    .cloud.two {
-      width: 38px;
-      height: 12px;
-      top: 108px;
-      right: 40px;
-    }
-
-    .cropline {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 24px;
-      height: 14px;
-      background: rgba(126, 75, 42, 0.32);
-      z-index: 1;
-    }
-
-    .little-crop,
-    .little-crop::before,
-    .little-crop::after {
-      position: absolute;
-      bottom: 32px;
-      width: 24px;
-      height: 28px;
-      background: #ec6a43;
-      border-radius: 6px 6px 2px 2px;
-      z-index: 2;
-    }
-
-    .little-crop::before,
-    .little-crop::after {
-      content: '';
-      bottom: 0;
-      width: 7px;
-      height: 16px;
-      border-radius: 2px;
-      background: #ec6a43;
-    }
-
-    .little-crop::before { left: 4px; }
-    .little-crop::after { right: 4px; }
-    .little-crop.one { left: 42px; transform: rotate(6deg); }
-    .little-crop.two { left: 126px; background: #f0bf7e; transform: rotate(-1deg); }
-    .little-crop.three { right: 34px; background: #e4d0a0; transform: rotate(1deg); }
-
-    .quote-secondary {
-      align-self: flex-end;
-      max-width: 300px;
-      margin-top: -6px;
-      padding: 15px 18px;
-      background: rgba(255,255,255,0.95);
-      border-radius: 22px;
-      color: #5d594a;
-      line-height: 1.38;
-      font-size: 0.94rem;
-    }
-
-    @media (max-width: 1080px) {
-      body { overflow: auto; }
-      #hero { min-height: 100vh; height: auto; padding: 26px 18px 22px; }
-      .hero-inner { grid-template-columns: 1fr; gap: 20px; }
-      .hero-content { align-items: flex-start; }
-      .card-shell { max-width: none; width: 100%; }
-      .right { min-height: 420px; }
-      .visual-stack { width: min(100%, 520px); }
-    }
-
-    @media (max-width: 720px) {
-      body { overflow: auto; }
-      #hero { padding: 22px 14px 18px; }
-      .hero-title { font-size: clamp(2.15rem, 10vw, 3rem); }
-      .hero-subtitle { max-width: none; }
-      .links a { flex-basis: 100%; }
-      .right { display: none; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in — AgroMind</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cream: oklch(0.985 0.012 95);
+            --forest: oklch(0.32 0.07 145);
+            --forest-deep: oklch(0.22 0.06 145);
+            --leaf: oklch(0.62 0.16 140);
+            --background: var(--cream);
+            --foreground: oklch(0.18 0.04 145);
+            --card: oklch(1 0 0);
+            --border: oklch(0.9 0.015 95);
+            --muted-foreground: oklch(0.45 0.03 145);
+            --shadow-card: 0 30px 80px -30px oklch(0.22 0.06 145 / 0.25);
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            font-family: 'Inter', system-ui, sans-serif;
+            background-color: var(--background);
+            color: var(--foreground);
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        .login-layout {
+            display: grid;
+            min-height: 100vh;
+            grid-template-columns: 1fr;
+        }
+
+        @media (min-width: 1024px) {
+            .login-layout {
+                grid-template-columns: 1fr 1.1fr;
+            }
+        }
+
+        /* Left Side: Auth Card */
+        .auth-panel {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 24px;
+            z-index: 10;
+        }
+
+        .auth-bg-glow {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(60% 50% at 50% 30%, oklch(0.97 0.04 130 / 0.6), transparent);
+            pointer-events: none;
+            opacity: 0.6;
+            z-index: -1;
+        }
+
+        .card-container {
+            width: 100%;
+            max-width: 448px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: var(--shadow-card);
+            animation: slideUp 0.7s ease-out;
+        }
+
+        .back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 24px;
+            color: var(--muted-foreground);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 700;
+            transition: color 0.2s, transform 0.2s;
+        }
+
+        .back-home:hover {
+            color: var(--forest-deep);
+            transform: translateX(-2px);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-family: 'Fraunces', 'Playfair Display', serif;
+            font-size: 2.5rem;
+            letter-spacing: -0.02em;
+            margin: 0;
+            color: var(--forest-deep);
+        }
+
+        @media (min-width: 640px) {
+            h1 { font-size: 3rem; }
+            .card-container { padding: 40px; }
+        }
+
+        .subtitle {
+            margin-top: 12px;
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+        }
+
+        .clerk-wrap { margin-top: 32px; }
+
+        .auth-error {
+            margin-top: 18px;
+            padding: 12px 14px;
+            border: 1px solid oklch(0.72 0.13 28 / 0.35);
+            border-radius: 16px;
+            background: oklch(0.96 0.03 28 / 0.55);
+            color: oklch(0.42 0.12 28);
+            font-size: 0.875rem;
+            line-height: 1.4;
+        }
+
+        .social-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .social-btn {
+            width: 100%;
+            min-height: 52px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 0 18px;
+            border-radius: 9999px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            color: var(--foreground);
+            font: inherit;
+            font-size: 0.925rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s, background 0.2s;
+        }
+
+        .social-btn:hover {
+            transform: translateY(-1px);
+            border-color: oklch(0.82 0.035 145);
+            box-shadow: 0 10px 24px -18px oklch(0.22 0.06 145 / 0.45);
+        }
+
+        .social-btn:disabled {
+            cursor: wait;
+            opacity: 0.7;
+            transform: none;
+        }
+
+        .social-icon {
+            width: 20px;
+            height: 20px;
+            flex: 0 0 20px;
+        }
+
+        .divider {
+            display: flex; align-items: center; gap: 16px;
+            margin: 28px 0;
+        }
+        .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+        .divider span {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: var(--muted-foreground);
+        }
+
+        .email-form { display: flex; flex-direction: column; gap: 16px; }
+        .field { display: flex; flex-direction: column; gap: 8px; }
+        .field label { font-size: 0.875rem; font-weight: 600; }
+        .field input {
+            padding: 14px 18px;
+            border-radius: 9999px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+        .field input:focus {
+            outline: none;
+            border-color: oklch(0.32 0.07 145 / 0.4);
+            box-shadow: 0 0 0 4px oklch(0.32 0.07 145 / 0.05);
+        }
+
+        .email-btn {
+            padding: 14px;
+            border-radius: 9999px;
+            background: var(--forest-deep);
+            color: var(--cream);
+            border: none;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .email-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            opacity: 0.9;
+        }
+
+        /* Right Side: Interactive Hero */
+        .hero-panel {
+            display: none;
+            background: var(--forest-deep);
+            position: relative;
+            overflow: hidden;
+            color: white;
+            --pointer-x: 50%;
+            --pointer-y: 50%;
+        }
+
+        @media (min-width: 1024px) {
+            .hero-panel { display: flex; align-items: center; justify-content: center; }
+        }
+
+        /* Forest Decoration */
+        .forest-visual {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at var(--pointer-x) var(--pointer-y), oklch(0.62 0.16 140 / 0.32), transparent 18%),
+                linear-gradient(135deg, oklch(0.28 0.08 145) 0%, oklch(0.12 0.05 145) 100%);
+        }
+
+        .forest-visual::before {
+            content: "";
+            position: absolute;
+            inset: -20% -10%;
+            background:
+                repeating-linear-gradient(112deg, transparent 0 42px, oklch(0.62 0.13 138 / 0.16) 43px 46px, transparent 47px 86px);
+            opacity: 0.42;
+            animation: fieldDrift 16s linear infinite;
+        }
+
+        .forest-visual::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(100deg, transparent 0 42%, oklch(0.9 0.08 125 / 0.14) 48%, transparent 55%);
+            transform: translateX(-110%);
+            animation: scanSweep 5.5s ease-in-out infinite;
+        }
+
+        .field-scene {
+            position: relative;
+            z-index: 10;
+            width: min(72%, 620px);
+            display: grid;
+            gap: 20px;
+            padding: 40px;
+        }
+
+        .field-panel {
+            position: relative;
+            min-height: 300px;
+            border: 1px solid rgba(255,255,255,0.16);
+            border-radius: 28px;
+            overflow: hidden;
+            background:
+                linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02)),
+                radial-gradient(circle at 50% 0%, rgba(123, 193, 66, 0.2), transparent 45%);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 30px 80px -48px rgba(0,0,0,0.8);
+        }
+
+        .field-row {
+            position: absolute;
+            left: -8%;
+            right: -8%;
+            height: 18px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, transparent, rgba(125, 207, 79, 0.42), transparent);
+            transform: rotate(-10deg);
+            animation: rowPulse 4s ease-in-out infinite;
+        }
+
+        .field-row:nth-child(1) { top: 38%; animation-delay: -0.4s; }
+        .field-row:nth-child(2) { top: 52%; animation-delay: -1.2s; }
+        .field-row:nth-child(3) { top: 66%; animation-delay: -2s; }
+        .field-row:nth-child(4) { top: 80%; animation-delay: -2.8s; }
+
+        .sensor-node {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border: 0;
+            border-radius: 999px;
+            background: var(--leaf);
+            box-shadow: 0 0 0 0 rgba(123, 193, 66, 0.42), 0 0 28px rgba(123, 193, 66, 0.42);
+            cursor: pointer;
+            animation: ping 2.4s ease-out infinite;
+        }
+
+        .sensor-node:hover,
+        .sensor-node.active {
+            background: #f0c040;
+            box-shadow: 0 0 0 10px rgba(240, 192, 64, 0.12), 0 0 34px rgba(240, 192, 64, 0.5);
+        }
+
+        .sensor-node.one { top: 31%; left: 28%; }
+        .sensor-node.two { top: 55%; left: 62%; animation-delay: -0.8s; }
+        .sensor-node.three { top: 73%; left: 42%; animation-delay: -1.5s; }
+
+        .insight-chip {
+            position: absolute;
+            top: 28px;
+            left: 28px;
+            right: 28px;
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.76);
+        }
+
+        .insight-chip strong {
+            display: block;
+            margin-top: 6px;
+            color: white;
+            font-size: 1.1rem;
+        }
+
+        .metric-strip {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .metric {
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 18px;
+            padding: 14px;
+            background: rgba(255,255,255,0.07);
+            backdrop-filter: blur(10px);
+        }
+
+        .metric span {
+            display: block;
+            color: rgba(255,255,255,0.62);
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+        }
+
+        .metric strong {
+            display: block;
+            margin-top: 8px;
+            font-size: 1rem;
+        }
+
+        .quote-box {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 32px;
+            animation: pulse-border 4s infinite ease-in-out;
+        }
+
+        @keyframes pulse-border {
+            0%, 100% { border-color: rgba(255,255,255,0.1); }
+            50% { border-color: rgba(255,255,255,0.2); }
+        }
+
+        .quote-text {
+            font-family: 'Fraunces', serif;
+            font-size: 1.5rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .quote-author {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Small leaves/floating elements placeholder */
+        .leaf-float {
+            position: absolute;
+            background: oklch(0.62 0.16 140 / 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 70%;
+            filter: blur(2px);
+            animation: float 8s infinite alternate ease-in-out;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(30px, -40px) rotate(45deg); }
+        }
+
+        @keyframes fieldDrift {
+            from { background-position: 0 0; }
+            to { background-position: 180px 0; }
+        }
+
+        @keyframes scanSweep {
+            0%, 35% { transform: translateX(-110%); }
+            70%, 100% { transform: translateX(110%); }
+        }
+
+        @keyframes rowPulse {
+            0%, 100% { opacity: 0.34; }
+            50% { opacity: 0.72; }
+        }
+
+        @keyframes ping {
+            0% { box-shadow: 0 0 0 0 rgba(123, 193, 66, 0.32), 0 0 28px rgba(123, 193, 66, 0.42); }
+            70%, 100% { box-shadow: 0 0 0 18px rgba(123, 193, 66, 0), 0 0 28px rgba(123, 193, 66, 0.42); }
+        }
+    </style>
 </head>
 <body>
-  <section id="hero">
-    <div class="dot-grid"></div>
-    <div class="hero-inner">
-      <div class="hero-content">
-        <a href="/" class="hero-logo"><span class="leaf">🌿</span> AgroMind</a>
-        <div class="hero-badge"><span class="badge-dot"></span> AI agricultural intelligence</div>
-        <h1 class="hero-title">Start using <span class="accent">AgroMind</span></h1>
-        <p class="hero-subtitle">Your AI companion for crop, soil, and pest management.</p>
+    <main class="login-layout">
+        <!-- FORM SIDE -->
+        <section class="auth-panel">
+            <div class="auth-bg-glow"></div>
+            <div class="card-container">
+                <a class="back-home" href="/">← Back to home</a>
+                <h1>Sign in</h1>
+                <p class="subtitle">Choose your preferred sign-in method below.</p>
 
-        <div class="card-shell">
-          <form class="auth-card" method="post" action="/login">
-            <h2>Sign in</h2>
-            <p class="sub">Use Google or your email to access your saved chats.</p>
+                <div class="clerk-wrap">
+                    {% if clerk_enabled %}
+                        <div class="social-buttons" aria-label="Social sign-in options">
+                            <button class="social-btn" type="button" data-clerk-oauth="oauth_google">
+                                <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                    <path fill="#FBBC05" d="M5.84 14.1c-.22-.66-.35-1.36-.35-2.1s.13-1.44.35-2.1V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l3.66-2.84z"/>
+                                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06L5.84 9.9C6.71 7.31 9.14 5.38 12 5.38z"/>
+                                </svg>
+                                <span>Continue with Google</span>
+                            </button>
+                            {% if clerk_enable_apple %}
+                                <button class="social-btn" type="button" data-clerk-oauth="oauth_apple">
+                                    <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path fill="currentColor" d="M16.37 1.43c0 1.14-.42 2.16-1.27 3.06-.91.96-1.96 1.51-3.09 1.42-.14-1.09.4-2.25 1.22-3.15.86-.94 2.21-1.66 3.14-1.33zM20.84 17.62c-.51 1.17-.76 1.69-1.42 2.72-.92 1.41-2.22 3.17-3.83 3.19-1.43.01-1.8-.93-3.75-.92-1.95.01-2.36.93-3.79.92-1.61-.02-2.84-1.6-3.76-3.01-2.57-3.94-2.84-8.57-1.25-11.03 1.13-1.75 2.92-2.78 4.61-2.78 1.72 0 2.8.94 4.22.94 1.38 0 2.22-.94 4.21-.94 1.5 0 3.09.82 4.21 2.23-3.7 2.03-3.1 7.31.55 8.68z"/>
+                                    </svg>
+                                    <span>Continue with Apple</span>
+                                </button>
+                            {% endif %}
+                        </div>
+                        <div id="clerk-status" class="auth-error" hidden></div>
+                    {% else %}
+                        <div style="padding: 24px; background: var(--background); border-radius: 16px; border: 1px dashed var(--border); text-align: center; color: var(--muted-foreground); font-size: 0.875rem;">
+                            Clerk is not configured yet. Add CLERK_PUBLISHABLE_KEY and CLERK_SECRET_KEY to enable Google and Apple sign-in.
+                        </div>
+                    {% endif %}
+                </div>
 
-            {% if error %}
-              <div class="error">{{ error }}</div>
-            {% endif %}
+                {% if error %}
+                    <div class="auth-error">{{ error }}</div>
+                {% endif %}
 
-            <a class="google-btn" href="/login/google" role="button">
-              <span class="google-mark" aria-hidden="true"><span class="blue"></span><span class="red"></span><span class="yellow"></span><span class="green"></span></span>
-              Continue with Google
-            </a>
+                <div class="divider">
+                    <span>Or use email</span>
+                </div>
 
-            <div class="divider">OR</div>
+                <form class="email-form" method="post" action="/login">
+                    <div class="field">
+                        <label for="email">Email Address</label>
+                        <input id="email" name="email" type="email" placeholder="name@domain.com" required>
+                    </div>
+                    <button class="email-btn" type="submit">Continue with Email</button>
+                </form>
 
-            <div class="field{% if error %} error-field{% endif %}">
-              <label for="email">Email Address</label>
-              <input id="email" name="email" type="email" placeholder="name@yourcompany.com" required />
-              <div class="field-hint">If this email is new, we will create your account automatically.</div>
+                <p style="margin-top: 24px; font-size: 0.75rem; color: var(--muted-foreground); text-align: center;">
+                    By continuing, you agree to our <a href="/terms" style="color: var(--forest-deep); font-weight: 600; text-decoration: none;">Terms of Service</a>.
+                </p>
+            </div>
+        </section>
+
+        <!-- VISUAL SIDE -->
+        <section class="hero-panel">
+            <div class="forest-visual">
+                <div class="leaf-float" style="top: 20%; left: 10%;"></div>
+                <div class="leaf-float" style="top: 70%; left: 80%; animation-delay: -2s;"></div>
+                <div class="leaf-float" style="top: 40%; left: 50%; width: 60px; height: 60px; animation-duration: 12s;"></div>
             </div>
 
-            <button class="email-btn" type="submit">Continue with email</button>
-
-            <div class="fineprint">
-              Agromind is designed by <a href="https://www.prianandhini.tech">Pria Nandhini M A</a>.
+            <div class="field-scene">
+                <div class="field-panel" aria-label="Interactive crop health field">
+                    <div class="insight-chip">
+                        <div>
+                            Live crop health
+                            <strong id="hero-insight">Irrigation looks steady</strong>
+                        </div>
+                        <div>
+                            Scan
+                            <strong id="hero-score">92%</strong>
+                        </div>
+                    </div>
+                    <div class="field-row"></div>
+                    <div class="field-row"></div>
+                    <div class="field-row"></div>
+                    <div class="field-row"></div>
+                    <button class="sensor-node one active" type="button" data-insight="Irrigation looks steady" data-score="92%" aria-label="Inspect irrigation sensor"></button>
+                    <button class="sensor-node two" type="button" data-insight="Pest risk is low" data-score="88%" aria-label="Inspect pest risk sensor"></button>
+                    <button class="sensor-node three" type="button" data-insight="Nitrogen may need review" data-score="76%" aria-label="Inspect soil nutrient sensor"></button>
+                </div>
+                <div class="metric-strip" aria-label="Field metrics">
+                    <div class="metric">
+                        <span>Moisture</span>
+                        <strong>Balanced</strong>
+                    </div>
+                    <div class="metric">
+                        <span>Pest Watch</span>
+                        <strong>Calm</strong>
+                    </div>
+                    <div class="metric">
+                        <span>Next Step</span>
+                        <strong>Ask AgroMind</strong>
+                    </div>
+                </div>
+                <div class="quote-box">
+                    <p class="quote-text">
+                        "AgroMind has completely changed how we handle pest outbreaks. It's like having a specialist in my pocket 24/7."
+                    </p>
+                    <div class="quote-author">
+                        <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--leaf);"></div>
+                        <span>David Chen, Vineyard Manager</span>
+                    </div>
+                </div>
             </div>
+        </section>
+    </main>
 
-            <div class="links">
-              <a class="home-link" href="/">Back to home</a>
-            </div>
-          </form>
-        </div>
-      </div>
+    {% if clerk_enabled %}
+    <script
+        async
+        crossorigin="anonymous"
+        data-clerk-publishable-key="{{ clerk_publishable_key }}"
+        src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
+        type="text/javascript"
+    ></script>
 
-      <div class="right" aria-hidden="true">
-        <div class="visual-stack">
-          <div class="quote-card">"AgroMind keeps the workflow simple and calm."</div>
+    <script>
+        window.addEventListener('load', async function () {
+            const statusBox = document.getElementById('clerk-status');
+            const buttons = Array.from(document.querySelectorAll('[data-clerk-oauth]'));
+            const heroPanel = document.querySelector('.hero-panel');
+            const insightText = document.getElementById('hero-insight');
+            const insightScore = document.getElementById('hero-score');
+            const sensorNodes = Array.from(document.querySelectorAll('.sensor-node'));
 
-          <div class="art-card small">
-            <div class="pixel-crop" aria-hidden="true">
-              <span></span><span></span><span></span><span></span>
-              <span></span><span></span><span></span><span></span>
-              <span></span><span></span><span></span><span></span>
-              <span></span><span></span><span></span><span></span>
-            </div>
-          </div>
+            function showAuthError(message) {
+                if (!statusBox) return;
+                statusBox.textContent = message;
+                statusBox.hidden = false;
+            }
 
-          <div class="art-card field">
-            <div class="hud">SCORE: 4<br/>AGROMIND FIELD ARCADE</div>
-            <div class="cloud one"></div>
-            <div class="cloud two"></div>
-            <div class="little-crop one"></div>
-            <div class="little-crop two"></div>
-            <div class="little-crop three"></div>
-            <div class="cropline"></div>
-          </div>
+            function setButtonsLoading(isLoading) {
+                buttons.forEach((button) => {
+                    button.disabled = isLoading;
+                });
+            }
 
-          <div class="quote-secondary">"A clean layout for chat and crop support."</div>
-        </div>
-      </div>
-    </div>
-  </section>
+            function getClerkAuthResource() {
+                return (
+                    window.Clerk.signIn ||
+                    (window.Clerk.client && window.Clerk.client.signIn) ||
+                    window.Clerk.signUp ||
+                    (window.Clerk.client && window.Clerk.client.signUp)
+                );
+            }
 
+            async function startSocialSignIn(strategy) {
+                const redirectOptions = {
+                    strategy: strategy,
+                    redirectUrl: '/sso-callback',
+                    redirectUrlComplete: '/login?clerk_sync=1',
+                    actionCompleteRedirectUrl: '/login?clerk_sync=1'
+                };
+                const authResource = getClerkAuthResource();
+
+                if (authResource && typeof authResource.authenticateWithRedirect === 'function') {
+                    await authResource.authenticateWithRedirect(redirectOptions);
+                    return;
+                }
+
+                if (authResource && typeof authResource.create === 'function') {
+                    await authResource.create(redirectOptions);
+                    return;
+                }
+
+                throw new Error('Clerk is still loading. Please try again.');
+            }
+
+            async function syncClerkSession() {
+                const sessionId = window.Clerk && window.Clerk.session && window.Clerk.session.id;
+                if (!sessionId) return false;
+
+                const response = await fetch('/login/clerk', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ session_id: sessionId })
+                });
+                const payload = await response.json().catch(() => ({}));
+
+                if (!response.ok) {
+                    throw new Error(payload.error || 'Unable to complete Clerk sign-in.');
+                }
+
+                window.location.assign(payload.redirect || '/chat');
+                return true;
+            }
+
+            if (heroPanel) {
+                heroPanel.addEventListener('pointermove', (event) => {
+                    const rect = heroPanel.getBoundingClientRect();
+                    const x = ((event.clientX - rect.left) / rect.width) * 100;
+                    const y = ((event.clientY - rect.top) / rect.height) * 100;
+                    heroPanel.style.setProperty('--pointer-x', `${x}%`);
+                    heroPanel.style.setProperty('--pointer-y', `${y}%`);
+                });
+            }
+
+            sensorNodes.forEach((node) => {
+                node.addEventListener('click', () => {
+                    sensorNodes.forEach((item) => item.classList.remove('active'));
+                    node.classList.add('active');
+                    if (insightText) insightText.textContent = node.dataset.insight;
+                    if (insightScore) insightScore.textContent = node.dataset.score;
+                });
+            });
+
+            const waitClerk = setInterval(() => {
+                if (window.Clerk) {
+                    clearInterval(waitClerk);
+                    window.Clerk.load({
+                        appearance: {
+                            variables: {
+                                colorPrimary: '#11220a',
+                                colorBackground: '#ffffff',
+                                colorText: '#1c3016',
+                                colorInputText: '#1c3016',
+                                borderRadius: '9999px',
+                                fontFamily: 'Inter, sans-serif'
+                            },
+                            elements: {
+                                card: 'shadow-none border-none p-0 m-0 bg-transparent',
+                                socialButtonsBlockButton: 'border border-gray-100 font-semibold text-sm py-3.5 transition-all hover:bg-gray-50 hover:-translate-y-0.5 shadow-sm',
+                                socialButtonsBlockButtonText: 'font-semibold',
+                                dividerRow: 'hidden',
+                                header: 'hidden',
+                                footer: 'hidden',
+                                main: 'p-0',
+                                formButtonPrimary: 'hidden',
+                                formFieldInput: 'hidden',
+                                formFieldLabel: 'hidden'
+                            }
+                        }
+                    }).then(async () => {
+                        buttons.forEach((button) => {
+                            button.addEventListener('click', async () => {
+                                setButtonsLoading(true);
+                                try {
+                                    if (statusBox) statusBox.hidden = true;
+                                    await startSocialSignIn(button.dataset.clerkOauth);
+                                } catch (error) {
+                                    setButtonsLoading(false);
+                                    showAuthError('Unable to start social sign-in. Please check that this provider is enabled in Clerk.');
+                                }
+                            });
+                        });
+
+                        const params = new URLSearchParams(window.location.search);
+                        if (params.get('clerk_sync') === '1') {
+                            setButtonsLoading(true);
+                            try {
+                                await syncClerkSession();
+                            } catch (error) {
+                                setButtonsLoading(false);
+                                showAuthError(error.message || 'Unable to complete social sign-in.');
+                            }
+                        }
+                    }).catch((error) => {
+                        showAuthError(error.message || 'Unable to load Clerk.');
+                    });
+                }
+            }, 100);
+        });
+    </script>
+    {% endif %}
 </body>
 </html>

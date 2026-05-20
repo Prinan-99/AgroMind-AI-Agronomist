@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing Checkout - AgroMind</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #1f201d;
+            --panel: #121310;
+            --field: #383936;
+            --line: rgba(255,255,255,0.08);
+            --text: #f7f4ee;
+            --muted: #9d9b94;
+            --green: #7bc142;
+            --green-soft: rgba(123,193,66,0.16);
+            --gold: #f0c040;
+            --danger: #f87171;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+        }
+        body[data-appearance="light"] {
+            --bg: #faf7f0;
+            --panel: #ffffff;
+            --field: #f0eee7;
+            --line: rgba(14,31,8,0.12);
+            --text: #0e1f08;
+            --muted: #6b7c5e;
+        }
+        .page {
+            max-width: 1040px;
+            margin: 0 auto;
+            padding: 32px 20px 44px;
+        }
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+        .brand {
+            color: var(--text);
+            text-decoration: none;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 900;
+        }
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(123,193,66,0.14);
+            color: var(--green);
+            border: 1px solid rgba(123,193,66,0.25);
+            border-radius: 999px;
+            padding: 8px 14px;
+            font-size: 0.85rem;
+        }
+        .hero {
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            background:
+                linear-gradient(135deg, rgba(123,193,66,0.12), transparent 50%),
+                rgba(255,255,255,0.05);
+            padding: 28px 28px 26px;
+            margin-bottom: 18px;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.12);
+        }
+        h1 {
+            margin: 0 0 10px;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.15rem, 4vw, 3.2rem);
+        }
+        .sub {
+            color: var(--muted);
+            line-height: 1.6;
+            margin: 0;
+            max-width: 760px;
+        }
+        .summary {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            padding: 18px 20px;
+            background: rgba(255,255,255,0.05);
+            margin-bottom: 22px;
+            flex-wrap: wrap;
+        }
+        .summary strong { font-weight: 900; }
+        .plan-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+        }
+        .plan-card {
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            padding: 22px 22px 20px;
+            background: rgba(255,255,255,0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            min-height: 100%;
+        }
+        .plan-card.active {
+            border-color: var(--green);
+            box-shadow: 0 0 0 1px var(--green-soft);
+            transform: translateY(-2px);
+        }
+        .plan-name { font-weight: 900; font-size: 1.15rem; }
+        .plan-price { font-size: 1.9rem; font-weight: 900; }
+        .plan-price span { color: var(--muted); font-size: 0.95rem; font-weight: 700; }
+        .hint { color: var(--muted); margin: 0; line-height: 1.55; }
+        .plan-features {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 10px;
+            color: var(--muted);
+        }
+        .plan-features li::before {
+            content: "✓";
+            color: var(--green);
+            font-weight: 900;
+            margin-right: 8px;
+        }
+        .plan-key {
+            margin-top: auto;
+            color: var(--muted);
+            font: 0.78rem ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+        .button-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        .btn {
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: var(--field);
+            color: var(--text);
+            cursor: pointer;
+            font: inherit;
+            font-weight: 800;
+            padding: 10px 16px;
+            text-decoration: none;
+        }
+        .btn.primary { background: var(--green); color: #102009; border-color: transparent; }
+        .btn.danger { color: var(--danger); }
+        .checkout-panel {
+            margin-top: 22px;
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            padding: 24px;
+            background:
+                radial-gradient(circle at top right, rgba(240,192,64,0.08), transparent 30%),
+                rgba(255,255,255,0.05);
+        }
+        .checkout-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 8px;
+        }
+        .checkout-note {
+            color: var(--muted);
+            line-height: 1.6;
+            margin: 0;
+            max-width: 720px;
+        }
+        .empty-note {
+            color: var(--muted);
+            line-height: 1.55;
+            margin: 0;
+        }
+        #clerk-pricing-table { min-height: 180px; margin-top: 14px; }
+        .checkout-steps {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 18px;
+            margin-bottom: 18px;
+        }
+        .step-card {
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 16px;
+            background: rgba(255,255,255,0.04);
+        }
+        .step-label {
+            color: var(--green);
+            font-size: 0.76rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .step-title {
+            font-weight: 900;
+            margin-bottom: 6px;
+        }
+        .step-copy {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.5;
+            font-size: 0.92rem;
+        }
+        .status {
+            min-height: 24px;
+            margin-top: 18px;
+            color: var(--green);
+            font-weight: 700;
+        }
+        .billing-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+            gap: 18px;
+            margin-top: 22px;
+        }
+        .side-panel {
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            padding: 22px;
+            background: rgba(255,255,255,0.04);
+        }
+        .side-panel h2,
+        .side-panel h3 {
+            margin: 0 0 10px;
+            font-family: 'Playfair Display', serif;
+        }
+        .side-list {
+            list-style: none;
+            padding: 0;
+            margin: 14px 0 0;
+            display: grid;
+            gap: 12px;
+        }
+        .side-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            margin-top: 7px;
+            border-radius: 50%;
+            background: var(--green);
+            flex: 0 0 auto;
+        }
+        @media (max-width: 900px) {
+            .plan-grid { grid-template-columns: 1fr; }
+            .topbar, .summary { flex-direction: column; align-items: flex-start; }
+            .checkout-head { flex-direction: column; }
+            .checkout-steps,
+            .billing-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body data-appearance="{{ settings.appearance }}">
+    <div class="page">
+        <div class="topbar">
+            <a class="brand" href="/settings">← Back to Settings</a>
+            <span class="pill">Billing checkout page</span>
+        </div>
+
+        <section class="hero">
+            <h1>Choose a subscription plan</h1>
+            <p class="sub">A focused checkout page for AgroMind billing. Review the plans, open Clerk checkout, and return to Settings once your subscription is active.</p>
+        </section>
+
+        <div class="billing-grid">
+            <div>
+                <div class="summary">
+                    <div>
+                        <strong>Current plan:</strong> {{ current_plan.name }}
+                        <div class="hint">Plan key: <code>{{ settings.plan_key }}</code></div>
+                    </div>
+                    <div class="button-row">
+                        <a class="btn" href="/settings">Return to settings</a>
+                        <button class="btn" id="sync-billing" type="button">Sync billing</button>
+                    </div>
+                </div>
+
+                <div class="checkout-steps">
+                    <div class="step-card">
+                        <div class="step-label">Step 1</div>
+                        <div class="step-title">Pick a plan</div>
+                        <p class="step-copy">Choose the plan that fits your work: Free, Farmer Plus, or Agri Pro.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-label">Step 2</div>
+                        <div class="step-title">Open checkout</div>
+                        <p class="step-copy">Click Subscribe to launch the real Clerk checkout session for the selected tier.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-label">Step 3</div>
+                        <div class="step-title">Return to Settings</div>
+                        <p class="step-copy">After checkout, sync billing and continue using AgroMind with the updated plan.</p>
+                    </div>
+                </div>
+
+                <section class="plan-grid">
+                    {% for plan in billing_plans %}
+                        <article class="plan-card{% if plan.key == settings.plan_key %} active{% endif %}">
+                            <div class="plan-name">{{ plan.name }}</div>
+                            <div class="plan-price">{{ plan.price }} <span>/ {{ plan.period }}</span></div>
+                            <p class="hint">{{ plan.description }}</p>
+                            <ul class="plan-features">
+                                {% for feature in plan.features %}
+                                    <li>{{ feature }}</li>
+                                {% endfor %}
+                            </ul>
+                            <div class="plan-key">{{ plan.key }}</div>
+                            <div class="button-row">
+                                <button class="btn primary" type="button" onclick="subscribe('{{ plan.key }}')">Subscribe</button>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </section>
+
+                <div id="billing-status" class="status" role="status"></div>
+            </div>
+
+            <aside class="side-panel">
+                <h2>Checkout panel</h2>
+                <p class="checkout-note">{% if clerk_enabled %}Clerk checkout appears below when enabled. The page is designed to keep the purchase decision and confirmation in one place.{% else %}Clerk billing is disabled right now, so the checkout panel will stay empty until your keys are configured.{% endif %}</p>
+                <ul class="side-list">
+                    <li><span class="dot"></span><span>Real billing flow only, no mock subscription data.</span></li>
+                    <li><span class="dot"></span><span>Stay on a single page to compare plans before checkout.</span></li>
+                    <li><span class="dot"></span><span>Use Sync billing after Clerk returns you to update the current plan.</span></li>
+                </ul>
+
+                {% if clerk_enabled %}
+                    <div class="checkout-panel">
+                        <div class="checkout-head">
+                            <div>
+                                <div class="plan-name">Clerk checkout</div>
+                                <p class="checkout-note">Launch the embedded pricing table or the selected-plan checkout from the buttons on the left.</p>
+                            </div>
+                            <div class="pill">Secure billing</div>
+                        </div>
+                        <div id="clerk-pricing-table"></div>
+                    </div>
+                {% else %}
+                    <div class="checkout-panel">
+                        <p class="empty-note">Clerk billing is disabled. Add Clerk keys to <code>.env</code> to enable checkout.</p>
+                    </div>
+                {% endif %}
+            </aside>
+        </div>
+    </div>
+
+    {% if clerk_enabled %}
+    <script
+        async
+        crossorigin="anonymous"
+        data-clerk-publishable-key="{{ clerk_publishable_key }}"
+        src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
+        type="text/javascript"
+    ></script>
+    {% endif %}
+
+    <script>
+        const clerkEnabled = {{ 'true' if clerk_enabled else 'false' }};
+        const billingStatus = document.getElementById('billing-status');
+
+        async function syncBilling() {
+            billingStatus.textContent = 'Syncing billing...';
+            const res = await fetch('/api/billing/sync', { method: 'POST' });
+            const data = await res.json().catch(() => ({}));
+            billingStatus.textContent = data.ok
+                ? `Billing synced. Current plan: ${data.current_plan?.name || data.current_plan_key || 'Free'}.`
+                : (data.error || 'Could not sync billing.');
+        }
+
+        async function subscribe(planKey) {
+            billingStatus.textContent = 'Starting checkout...';
+            const res = await fetch('/api/create-checkout-session', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ plan_key: planKey })
+            });
+            const data = await res.json().catch(() => ({}));
+            if (data.url) {
+                window.location = data.url;
+            } else {
+                const message = data.detail || data.error || 'Unable to start checkout.';
+                billingStatus.textContent = message;
+                alert(message);
+            }
+        }
+
+        const syncBillingButton = document.getElementById('sync-billing');
+        if (syncBillingButton) syncBillingButton.addEventListener('click', syncBilling);
+
+        if (clerkEnabled && window.location.search.includes('billing=success')) {
+            syncBilling();
+        }
+
+        if (clerkEnabled) {
+            const waitClerk = setInterval(() => {
+                if (!window.Clerk) return;
+                clearInterval(waitClerk);
+                window.Clerk.load({
+                    appearance: {
+                        variables: {
+                            colorPrimary: '#7bc142',
+                            colorBackground: '#1f201d',
+                            colorText: '#f7f4ee',
+                            borderRadius: '8px',
+                            fontFamily: 'DM Sans, sans-serif'
+                        }
+                    }
+                }).then(() => {
+                    const target = document.getElementById('clerk-pricing-table');
+                    if (target && window.Clerk.mountPricingTable) {
+                        window.Clerk.mountPricingTable(target, {
+                            for: 'user',
+                            newSubscriptionRedirectUrl: `${window.location.origin}/settings/billing/checkout?billing=success`
+                        });
+                    }
+                }).catch((error) => {
+                    if (billingStatus) billingStatus.textContent = error.message || 'Unable to load Clerk billing.';
+                });
+            }, 100);
+        }
+    </script>
+</body>
+</html>

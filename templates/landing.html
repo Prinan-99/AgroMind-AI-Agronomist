@@ -78,6 +78,33 @@
       overflow: hidden;
     }
 
+    .btn-primary {
+      background: var(--gold);
+      color: var(--green-dark);
+      padding: 14px 32px;
+      border-radius: 100px;
+      font-weight: 500;
+      font-size: 0.95rem;
+      text-decoration: none;
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(240,192,64,0.3);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(240,192,64,0.45); }
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.25);
+      color: var(--white);
+      padding: 14px 32px;
+      border-radius: 100px;
+      font-size: 0.95rem;
+      font-weight: 400;
+      text-decoration: none;
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-secondary:hover { border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.05); }
+
     /* Organic blob background */
     #hero::before {
       content: '';
@@ -112,7 +139,17 @@
     .hero-inner {
       position: relative; z-index: 2;
       max-width: 1200px; width: 100%;
-      display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+      display: grid; 
+      grid-template-columns: 1fr 1fr; 
+      gap: 40px; 
+      align-items: center;
+    }
+
+    .hero-content {
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
     }
 
     .hero-badge {
@@ -141,13 +178,13 @@
       margin-bottom: 24px;
       animation: fadeUp 0.8s ease 0.1s both;
     }
-    .hero-title .accent { color: var(--gold); display: block; }
+    .hero-title .accent { color: var(--gold); }
 
     .hero-subtitle {
       font-size: 1.1rem;
       color: rgba(255,255,255,0.65);
       line-height: 1.75;
-      max-width: 480px;
+      max-width: 600px;
       margin-bottom: 40px;
       font-weight: 300;
       animation: fadeUp 0.8s ease 0.2s both;
@@ -155,44 +192,53 @@
 
     .hero-actions {
       display: flex; gap: 16px; flex-wrap: wrap;
+      justify-content: flex-start;
       animation: fadeUp 0.8s ease 0.3s both;
     }
-    .btn-primary {
-      background: var(--gold);
-      color: var(--green-dark);
-      padding: 14px 32px;
-      border-radius: 100px;
-      font-weight: 500;
-      font-size: 0.95rem;
-      text-decoration: none;
-      display: inline-flex; align-items: center; gap: 8px;
-      transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 20px rgba(240,192,64,0.3);
+
+    /* Hero benefits wrapper */
+    .hero-benefits-wrapper {
+      position: relative; z-index: 2;
+      padding: 48px 6vw 40px;
+      max-width: 1200px; width: 100%; margin: 0 auto;
     }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(240,192,64,0.45); }
-    .btn-secondary {
-      background: transparent;
-      border: 1px solid rgba(255,255,255,0.25);
-      color: var(--white);
-      padding: 14px 32px;
-      border-radius: 100px;
-      font-size: 0.95rem;
-      font-weight: 400;
-      text-decoration: none;
-      display: inline-flex; align-items: center; gap: 8px;
-      transition: border-color 0.2s, background 0.2s;
+
+    /* Hero benefits cards */
+    .hero-benefits {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
     }
-    .btn-secondary:hover { border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.05); }
+
+    .benefit-card {
+      display: flex; flex-direction: column; gap: 12px; align-items: center; text-align: center;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(123,193,66,0.2);
+      border-radius: 14px; padding: 24px 20px;
+      backdrop-filter: blur(10px);
+      animation: fadeUp 1s ease both;
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+    .benefit-card:hover {
+      transform: translateY(-5px);
+      background: rgba(255,255,255,0.1);
+    }
+    .benefit-card:nth-child(1) { animation-delay: 0.5s; }
+    .benefit-card:nth-child(2) { animation-delay: 0.6s; }
+    .benefit-card:nth-child(3) { animation-delay: 0.7s; }
+    .benefit-icon { font-size: 2.2rem; flex-shrink: 0; }
+    .benefit-text { font-size: 0.85rem; line-height: 1.5; color: rgba(255,255,255,0.75); }
+    .benefit-text strong { color: var(--gold); display: block; margin-bottom: 6px; font-size: 1rem; font-family: 'Playfair Display', serif; }
 
     /* Hero visual — mock chat window */
     .hero-visual {
-      
       animation: fadeUp 0.8s ease 0.4s both;
       position: relative;
-      justify-self: end;
-      transform: translateX(28px);
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto;
+      transform: none;
     }
     .mock-window {
+      width: 100%;
       background: rgba(255,255,255,0.06);
       border: 1px solid rgba(123,193,66,0.2);
       border-radius: 20px;
@@ -278,8 +324,8 @@
     /* ─── STATS STRIP ─── */
     .stats-strip {
       background: var(--white);
-      border-top: 1px solid #e8f0e0;
-      border-bottom: 1px solid #e8f0e0;
+      max-width: 1200px; margin: 0 auto;
+      
       padding: 32px 6vw;
       display: flex; justify-content: center;
       gap: 64px; flex-wrap: wrap;
@@ -296,7 +342,7 @@
     /* ─── FEATURES ─── */
     #features {
       padding: 100px 6vw;
-      background: var(--cream);
+      background: var(--white);
     }
     .section-tag {
       font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase;
@@ -598,11 +644,11 @@
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- STATS -->
-<div class="stats-strip">
+  <!-- TESTIMONIALS / TRUST -->
+  <div class="stats-outer" style="background: var(--white); width: 100%;">
+    <div class="stats-strip">
   <div class="stat-item reveal">
     <div class="stat-num">40+</div>
     <div class="stat-label">Crop Diseases Covered</div>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Completing sign in - AgroMind</title>
+    <style>
+        :root {
+            --cream: oklch(0.985 0.012 95);
+            --forest-deep: oklch(0.22 0.06 145);
+            --muted: oklch(0.45 0.03 145);
+            --border: oklch(0.9 0.015 95);
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            display: grid;
+            place-items: center;
+            background: var(--cream);
+            color: var(--forest-deep);
+            font-family: Inter, system-ui, sans-serif;
+        }
+
+        .callback-card {
+            width: min(100% - 48px, 380px);
+            padding: 28px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            background: white;
+            text-align: center;
+            box-shadow: 0 30px 80px -40px oklch(0.22 0.06 145 / 0.28);
+        }
+
+        .spinner {
+            width: 34px;
+            height: 34px;
+            margin: 0 auto 18px;
+            border: 3px solid oklch(0.9 0.015 95);
+            border-top-color: var(--forest-deep);
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.25rem;
+        }
+
+        p {
+            margin: 10px 0 0;
+            color: var(--muted);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <main class="callback-card">
+        <div class="spinner" aria-hidden="true"></div>
+        <h1>Completing sign in</h1>
+        <p id="callback-status">Please wait while AgroMind verifies your account.</p>
+    </main>
+
+    <script
+        async
+        crossorigin="anonymous"
+        data-clerk-publishable-key="{{ clerk_publishable_key }}"
+        src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
+        type="text/javascript"
+    ></script>
+    <script>
+        window.addEventListener('load', function () {
+            const status = document.getElementById('callback-status');
+            const waitClerk = setInterval(() => {
+                if (!window.Clerk) return;
+
+                clearInterval(waitClerk);
+                window.Clerk.load()
+                    .then(() => window.Clerk.handleRedirectCallback({
+                        signInUrl: '/login',
+                        signUpUrl: '/login',
+                        signInForceRedirectUrl: '/login?clerk_sync=1',
+                        signUpForceRedirectUrl: '/login?clerk_sync=1'
+                    }))
+                    .catch((error) => {
+                        status.textContent = error.message || 'Unable to complete sign in. Please return to the login page and try again.';
+                    });
+            }, 100);
+        });
+    </script>
+</body>
+</html>

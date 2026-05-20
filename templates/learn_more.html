@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroMind RAG Manual</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cream: #faf7f0;
+            --forest: #0e2a08;
+            --green: #6fbf3d;
+            --line: rgba(14,42,8,0.12);
+            --muted: #687860;
+            --card: #ffffff;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background: var(--cream);
+            color: var(--forest);
+            font-family: 'DM Sans', system-ui, sans-serif;
+            line-height: 1.6;
+        }
+
+        .manual-shell {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 42px 22px 72px;
+        }
+
+        .top-link {
+            display: inline-flex;
+            color: var(--muted);
+            font-weight: 800;
+            text-decoration: none;
+            margin-bottom: 34px;
+        }
+
+        .top-link:hover { color: var(--forest); }
+
+        .hero {
+            border-bottom: 1px solid var(--line);
+            padding-bottom: 30px;
+            margin-bottom: 32px;
+        }
+
+        .eyebrow {
+            color: var(--green);
+            font-weight: 900;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-size: 0.78rem;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+            line-height: 1.08;
+        }
+
+        h1 {
+            font-size: clamp(2.45rem, 7vw, 4.7rem);
+            margin: 12px 0 12px;
+        }
+
+        h2 {
+            font-size: 1.9rem;
+            margin: 42px 0 14px;
+        }
+
+        h3 {
+            font-size: 1.24rem;
+            margin: 26px 0 10px;
+        }
+
+        p {
+            color: #263d20;
+            margin: 0 0 16px;
+        }
+
+        .lead {
+            color: var(--muted);
+            max-width: 760px;
+            font-size: 1.08rem;
+        }
+
+        .manual-card {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 22px;
+            margin: 18px 0;
+            box-shadow: 0 18px 50px rgba(14,42,8,0.08);
+        }
+
+        ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #263d20;
+        }
+
+        li { margin: 8px 0; }
+
+        .component-grid {
+            display: grid;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .component {
+            display: grid;
+            grid-template-columns: 210px 1fr;
+            gap: 14px;
+            padding: 13px 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .component:last-child { border-bottom: 0; }
+
+        code {
+            color: var(--forest);
+            background: rgba(111,191,61,0.13);
+            border-radius: 6px;
+            padding: 3px 6px;
+            font-size: 0.9rem;
+        }
+
+        .highlight-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .highlight {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 16px;
+            background: rgba(255,255,255,0.62);
+        }
+
+        .highlight strong {
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        footer {
+            color: var(--muted);
+            border-top: 1px solid var(--line);
+            margin-top: 42px;
+            padding-top: 20px;
+            font-weight: 700;
+        }
+
+        @media (max-width: 720px) {
+            .component,
+            .highlight-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="manual-shell">
+        <a class="top-link" href="/chat">Back to AgroMind</a>
+
+        <section class="hero">
+            <div class="eyebrow">Retrieval-Augmented Generation</div>
+            <h1>AgroMind RAG Architecture</h1>
+            <p class="lead">A technical overview of the agriculture-focused retrieval pipeline, document database, and grounded answer generation flow.</p>
+        </section>
+
+        <section>
+            <h2>What Is AgroMind?</h2>
+            <p>AgroMind is an agricultural chatbot that answers user queries using domain-specific documents. Rather than relying only on a language model's built-in knowledge, it retrieves relevant content from a curated document database before generating a response.</p>
+            <p>This Retrieval-Augmented Generation approach helps keep answers grounded in agricultural knowledge for crops, soil health, pest control, irrigation, fertilizers, and harvest planning.</p>
+        </section>
+
+        <section>
+            <h2>How It Works</h2>
+            <div class="manual-card">
+                <h3>Document Ingestion</h3>
+                <ul>
+                    <li>Agricultural PDFs are loaded and cleaned.</li>
+                    <li>Documents are split into smaller searchable chunks.</li>
+                    <li>Each chunk is converted into a vector embedding.</li>
+                    <li>Embeddings are stored in a vector database for similarity search.</li>
+                </ul>
+            </div>
+
+            <div class="manual-card">
+                <h3>Query And Response</h3>
+                <ul>
+                    <li>The user submits a question through the chat interface.</li>
+                    <li>The Flask backend receives the query through the chat API.</li>
+                    <li>The query can be translated or reformulated for better retrieval.</li>
+                    <li>Relevant document chunks are retrieved from the vector database.</li>
+                    <li>Retrieved chunks are passed as context to the language model.</li>
+                    <li>A grounded answer is generated and returned to the user.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>Main Components</h2>
+            <div class="component-grid manual-card">
+                <div class="component"><code>document_processor.py</code><span>Loads agricultural PDFs and extracts clean text.</span></div>
+                <div class="component"><code>chunker.py</code><span>Splits extracted content into smaller searchable segments.</span></div>
+                <div class="component"><code>vector_store.py</code><span>Stores chunk embeddings and handles similarity search.</span></div>
+                <div class="component"><code>retrieval.py</code><span>Fetches the most relevant chunks for a user query.</span></div>
+                <div class="component"><code>query_translation.py</code><span>Processes or reformulates user queries before retrieval.</span></div>
+                <div class="component"><code>answer_generation.py</code><span>Generates a final answer using retrieved context.</span></div>
+                <div class="component"><code>rag_pipeline.py</code><span>Connects retrieval and generation into a single workflow.</span></div>
+                <div class="component"><code>app.py</code><span>Flask backend that serves the chat UI and API endpoints.</span></div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Technical Highlights</h2>
+            <div class="highlight-grid">
+                <div class="highlight"><strong>Modular Design</strong><span>Each pipeline component is decoupled and independently maintainable.</span></div>
+                <div class="highlight"><strong>Semantic Search</strong><span>Document chunks are embedded and retrieved by semantic similarity.</span></div>
+                <div class="highlight"><strong>Grounded Answers</strong><span>The response is generated using retrieved agricultural context.</span></div>
+                <div class="highlight"><strong>Chat Management</strong><span>Users can manage conversation threads, rename chats, delete chats, and review history.</span></div>
+                <div class="highlight"><strong>Loading States</strong><span>Long retrievals show a meaningful RAG database loading message.</span></div>
+                <div class="highlight"><strong>Settings Layer</strong><span>User preferences, language selection, account options, and billing UI are managed separately.</span></div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Summary</h2>
+            <p>AgroMind is a Flask-based RAG chatbot that processes agricultural PDFs, splits them into chunks, stores embeddings in a vector database, retrieves relevant context per query, and generates grounded answers using that context.</p>
+            <p>The architecture is modular, with dedicated components for document processing, chunking, vector storage, retrieval, query handling, and answer generation.</p>
+        </section>
+
+        <footer>AgroMind | RAG Technical Manual</footer>
+    </main>
+</body>
+</html>
