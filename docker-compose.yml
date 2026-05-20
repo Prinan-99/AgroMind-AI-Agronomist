@@ -1,16 +1,43 @@
 services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: agromind-ollama
+    environment:
+      OLLAMA_HOST: "0.0.0.0:11434"
+      OLLAMA_MODEL: "${OLLAMA_MODEL:-llama3.2}"
+    ports:
+      - "${OLLAMA_PORT:-11434}:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    command: >-
+      sh -lc 'ollama serve & pid=$$!;
+      until ollama list >/dev/null 2>&1; do sleep 1; done;
+      if [ -n "$$OLLAMA_MODEL" ]; then ollama pull "$$OLLAMA_MODEL"; fi;
+      wait $$pid'
+    healthcheck:
+      test: ["CMD-SHELL", "ollama list >/dev/null 2>&1"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+
   agromind:
-    build: .
-    image: agromind-rag-chatbot:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    image: pria12/agromind-rag-chatbot:latest
     container_name: agromind-rag-chatbot
+    depends_on:
+      ollama:
+        condition: service_healthy
     ports:
       - "5000:5000"
     environment:
       PORT: "5000"
       FLASK_SECRET_KEY: "${FLASK_SECRET_KEY:-change-this-secret}"
       OLLAMA_MODEL: "${OLLAMA_MODEL:-llama3.2}"
-      OLLAMA_HOST: "0.0.0.0:11434"
-      OLLAMA_BASE_URL: "http://127.0.0.1:11434"
+      OLLAMA_BASE_URL: "http://ollama:11434"
       CHROMA_DB_DIR: "/app/chroma_db"
       AGROMIND_DB_PATH: "/app/runtime/agromind.db"
       AGROMIND_DATA_DIR: "/app/data/agri"
@@ -26,14 +53,12 @@ services:
     volumes:
       - ./runtime:/app/runtime
       - ./chroma_db:/app/chroma_db
-      - ollama_data:/root/.ollama
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:5000/health').read()\""]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 90s
     restart: unless-stopped
 
 volumes:

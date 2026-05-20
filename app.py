@@ -484,6 +484,11 @@ if not SKIP_RAG_INIT:
 else:
     app.logger.info("SKIP_RAG_INIT is set; skipping heavy RAG pipeline initialization")
 
+
+@app.route("/health")
+def health():
+    return jsonify({"status": "ok"}), 200
+
 @app.route("/")
 def index():
     return render_template("landing.html")
