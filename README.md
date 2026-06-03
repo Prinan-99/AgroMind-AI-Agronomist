@@ -15,6 +15,7 @@ A Retrieval-Augmented Generation (RAG) system designed to answer diverse agricul
 └── data/agri/                 ← Documents
 
 ## Home Page
-<img width="1915" height="1123" alt="image" src="https://github.com/user-attachments/assets/a4d16be6-64d8-458c-afa6-751020d9db2f" />
+https://github.com/user-attachments/assets/d13c8c97-991d-4248-a884-6081afae1327
+
 
 
